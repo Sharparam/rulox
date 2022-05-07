@@ -1,0 +1,13 @@
+[package]
+name = "rulox"
+version = "0.1.0"
+authors = ["Adam Hellberg <sharparam@sharparam.com>"]
+edition = "2021"
+description = "Rust implementation of the Lox language (bytecode version)"
+homepage = "https://github.com/Sharparam/rulox"
+repository = "https://github.com/Sharparam/rulox"
+license = "MPL-2.0"
+keywords = ["lox", "language"]
+categories = ["command-line-utilities", "compilers"]
+
+[dependencies]
