@@ -1,0 +1,7 @@
+{
+  "[rust]": {
+    "editor.defaultFormatter": "matklad.rust-analyzer",
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true
+  }
+}
