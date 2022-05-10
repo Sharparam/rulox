@@ -1,3 +1,4 @@
+mod chunk;
 mod cli;
 mod logging;
 
@@ -6,7 +7,10 @@ use std::{
     io::{self, Read},
 };
 
-use crate::cli::Args;
+use crate::{
+    chunk::{Chunk, OpCode},
+    cli::Args,
+};
 use anyhow::{Context, Result};
 use clap::Parser;
 use tracing::{info, Level};
@@ -24,6 +28,9 @@ fn main() -> Result<()> {
 
     info!("Program loaded! Contents:");
     println!("{}", contents);
+
+    let mut chunk = Chunk::new();
+    chunk.write_opcode(OpCode::Return);
 
     Ok(())
 }
