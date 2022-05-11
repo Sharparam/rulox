@@ -20,27 +20,27 @@ pub struct Args {
     pub verbose: bool,
 
     /// Log level to use
-    #[clap(short, long, arg_enum, default_value_t = LogLevel::INFO)]
+    #[clap(short, long, arg_enum, default_value_t = LogLevel::Info)]
     level: LogLevel,
 }
 
 impl Args {
     pub fn log_level(&self) -> Level {
         match self.level {
-            LogLevel::TRACE => Level::TRACE,
-            LogLevel::DEBUG => Level::DEBUG,
-            LogLevel::INFO => Level::INFO,
-            LogLevel::WARN => Level::WARN,
-            LogLevel::ERROR => Level::ERROR,
+            LogLevel::Trace => Level::TRACE,
+            LogLevel::Debug => Level::DEBUG,
+            LogLevel::Info => Level::INFO,
+            LogLevel::Warn => Level::WARN,
+            LogLevel::Error => Level::ERROR,
         }
     }
 }
 
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ArgEnum)]
 enum LogLevel {
-    TRACE = 0,
-    DEBUG = 1,
-    INFO = 2,
-    WARN = 3,
-    ERROR = 4,
+    Trace = 0,
+    Debug = 1,
+    Info = 2,
+    Warn = 3,
+    Error = 4,
 }

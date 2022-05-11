@@ -1,32 +1,77 @@
+use num_enum::{IntoPrimitive, TryFromPrimitive};
+
+use crate::value::Value;
+use anyhow::{bail, Result};
+
 pub struct Chunk {
     code: Vec<u8>,
+
+    lines: Vec<usize>,
+
+    constants: Vec<Value>,
 }
 
+#[derive(Clone, Copy, Eq, PartialEq, IntoPrimitive, TryFromPrimitive)]
 #[repr(u8)]
 pub enum OpCode {
-    Return = 0,
+    Constant,
+
+    ConstantLong,
+
+    Return,
 }
 
-impl From<u8> for OpCode {
-    fn from(value: u8) -> Self {
-        match value {
-            0 => OpCode::Return,
-            _ => panic!("Unknown opcode {}", value),
-        }
-    }
-}
+// 24 bits
+const MAX_CONSTANTS: usize = 0xFFFFFF;
 
 impl Chunk {
     pub fn new() -> Self {
-        Self { code: Vec::new() }
+        Self {
+            code: Vec::new(),
+            lines: Vec::new(),
+            constants: Vec::new(),
+        }
     }
 
-    pub fn write(&mut self, byte: u8) {
-        self.code.push(byte);
+    pub fn write<T>(&mut self, data: T, line: usize)
+    where
+        T: Into<u8>,
+    {
+        self.code.push(data.into());
+        self.lines.push(line);
     }
 
-    pub fn write_opcode(&mut self, opcode: OpCode) {
-        self.write(opcode as u8);
+    pub fn write_constant(&mut self, value: Value, line: usize) -> Result<()> {
+        let index = self.add_constant(value)?;
+        let opcode = if index > u8::MAX as usize {
+            OpCode::ConstantLong
+        } else {
+            OpCode::Constant
+        };
+
+        self.write(opcode, line);
+
+        if opcode == OpCode::Constant {
+            self.write(index as u8, line);
+        } else {
+            let low = (index & 0xFF) as u8;
+            let mid = ((index >> 8) & 0xFF) as u8;
+            let high = ((index >> 16) & 0xFF) as u8;
+            self.write(high, line);
+            self.write(mid, line);
+            self.write(low, line);
+        }
+
+        Ok(())
+    }
+
+    pub fn add_constant(&mut self, value: Value) -> Result<usize> {
+        if self.constants.len() >= MAX_CONSTANTS {
+            bail!("Too many constants!");
+        }
+
+        self.constants.push(value);
+        Ok(self.constants.len() - 1)
     }
 
     pub fn disassemble(&self, name: &str) {
@@ -40,16 +85,51 @@ impl Chunk {
 
     pub fn disassemble_instruction(&self, offset: usize) -> usize {
         print!("{:04} ", offset);
+        let line = self.lines[offset];
+
+        if offset > 0 && line == self.lines[offset - 1] {
+            print!("   | ");
+        } else {
+            print!("{:4} ", line);
+        }
 
         let instruction = self.code[offset];
-        let opcode: OpCode = instruction.into();
+        let opcode = OpCode::try_from(instruction);
         match opcode {
-            Some(OpCode::Return) => {}
+            Ok(OpCode::Constant) => constant_instruction("OP_CONSTANT", self, offset),
+            Ok(OpCode::ConstantLong) => constant_long_instruction("OP_CONSTANT_LONG", self, offset),
 
-            None => {
+            Ok(OpCode::Return) => simple_instruction("OP_RETURN", offset),
+
+            Err(_) => {
                 println!("Unknown opcode {}", instruction);
-                return offset + 1;
+                offset + 1
             }
         }
     }
+}
+
+fn simple_instruction(name: &str, offset: usize) -> usize {
+    println!("{}", name);
+
+    offset + 1
+}
+
+fn constant_instruction(name: &str, chunk: &Chunk, offset: usize) -> usize {
+    let constant = chunk.code[offset + 1];
+    let value = chunk.constants[constant as usize];
+    println!("{:16} {:4} '{}'", name, constant, value);
+
+    offset + 2
+}
+
+fn constant_long_instruction(name: &str, chunk: &Chunk, offset: usize) -> usize {
+    let high = chunk.code[offset + 1] as usize;
+    let mid = chunk.code[offset + 2] as usize;
+    let low = chunk.code[offset + 3] as usize;
+    let constant = high << 16 | mid << 8 | low;
+    let value = chunk.constants[constant];
+    println!("{:16} {:8} '{}'", name, constant, value);
+
+    offset + 4
 }

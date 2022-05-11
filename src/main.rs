@@ -1,6 +1,7 @@
 mod chunk;
 mod cli;
 mod logging;
+mod value;
 
 use std::{
     fs,
@@ -10,6 +11,7 @@ use std::{
 use crate::{
     chunk::{Chunk, OpCode},
     cli::Args,
+    value::Value,
 };
 use anyhow::{Context, Result};
 use clap::Parser;
@@ -30,7 +32,11 @@ fn main() -> Result<()> {
     println!("{}", contents);
 
     let mut chunk = Chunk::new();
-    chunk.write_opcode(OpCode::Return);
+
+    chunk.write_constant(Value::Number(1.2), 1)?;
+    chunk.write(OpCode::Return, 2);
+
+    chunk.disassemble("test chunk");
 
     Ok(())
 }
@@ -41,7 +47,7 @@ fn get_program_contents(args: &Args) -> Result<String> {
     }
 
     match &args.path {
-        Some(path) => read_program_from_file(&path),
+        Some(path) => read_program_from_file(path),
         None => read_program_from_stdin(),
     }
 }
@@ -49,11 +55,12 @@ fn get_program_contents(args: &Args) -> Result<String> {
 fn read_program_from_file(path: &str) -> Result<String> {
     let contents = fs::read_to_string(&path)
         .with_context(|| format!("Failed to read program from {}", &path))?;
-    return Ok(contents);
+
+    Ok(contents)
 }
 
 fn read_program_from_stdin() -> Result<String> {
     let mut contents = String::new();
     io::stdin().read_to_string(&mut contents)?;
-    return Ok(contents);
+    Ok(contents)
 }
