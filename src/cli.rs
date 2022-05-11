@@ -20,7 +20,7 @@ pub struct Args {
     pub verbose: bool,
 
     /// Log level to use
-    #[clap(short, long, arg_enum, default_value_t = LogLevel::Info)]
+    #[clap(short, long, arg_enum, default_value_t = LogLevel::Warn)]
     level: LogLevel,
 }
 
