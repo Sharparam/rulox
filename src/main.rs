@@ -2,6 +2,7 @@ mod chunk;
 mod cli;
 mod logging;
 mod value;
+mod vm;
 
 use std::{
     fs,
