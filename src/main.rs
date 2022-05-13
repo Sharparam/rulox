@@ -32,6 +32,8 @@ fn main() -> Result<()> {
     info!("Program loaded! Contents:");
     println!("{}", contents);
 
+    let vm = vm::VM::new();
+
     let mut chunk = Chunk::new();
 
     chunk.write_constant(Value::Number(1.2), 1)?;

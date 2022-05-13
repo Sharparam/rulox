@@ -7,21 +7,26 @@ pub enum VmError {
     Runtime,
 }
 
-struct VM<'a> {
-    chunk: &'a Chunk,
+pub type InterpretResult = Result<(), VmError>;
 
+pub struct VM {
+    // chunk: &'a Chunk,
     ip: usize,
 }
 
-impl<'a> VM<'a> {
-    pub fn interpret(&mut self, chunk: &'a Chunk) -> Result<(), VmError> {
-        self.chunk = chunk;
-        self.ip = 0;
-
-        Ok(())
-
-        //self.run()
+impl VM {
+    pub fn new() -> Self {
+        Self { ip: 0 }
     }
 
-    //pub fn run(&self) -> Result<(), VmError> {}
+    pub fn interpret(&mut self, chunk: &Chunk) -> InterpretResult {
+        // self.chunk = chunk;
+        self.ip = 0;
+
+        self.run(chunk)
+    }
+
+    fn run(&self, chunk: &Chunk) -> InterpretResult {
+        Ok(())
+    }
 }
