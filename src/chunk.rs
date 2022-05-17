@@ -8,10 +8,10 @@ pub struct Chunk {
 
     lines: Vec<usize>,
 
-    constants: Vec<Value>,
+    pub constants: Vec<Value>,
 }
 
-#[derive(Clone, Copy, Eq, PartialEq, IntoPrimitive, TryFromPrimitive)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, IntoPrimitive, TryFromPrimitive)]
 #[repr(u8)]
 pub enum OpCode {
     Constant,
@@ -31,6 +31,10 @@ impl Chunk {
             lines: Vec::new(),
             constants: Vec::new(),
         }
+    }
+
+    pub fn read(&self, idx: usize) -> u8 {
+        self.code[idx]
     }
 
     pub fn write<T>(&mut self, data: T, line: usize)
@@ -65,7 +69,7 @@ impl Chunk {
         Ok(())
     }
 
-    pub fn add_constant(&mut self, value: Value) -> Result<usize> {
+    fn add_constant(&mut self, value: Value) -> Result<usize> {
         if self.constants.len() >= MAX_CONSTANTS {
             bail!("Too many constants!");
         }

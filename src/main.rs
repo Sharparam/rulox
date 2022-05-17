@@ -32,7 +32,7 @@ fn main() -> Result<()> {
     info!("Program loaded! Contents:");
     println!("{}", contents);
 
-    let vm = vm::VM::new();
+    let mut vm = vm::VM::new();
 
     let mut chunk = Chunk::new();
 
@@ -40,6 +40,10 @@ fn main() -> Result<()> {
     chunk.write(OpCode::Return, 2);
 
     chunk.disassemble("test chunk");
+
+    info!("Running chunk:");
+
+    vm.interpret(&chunk)?;
 
     Ok(())
 }
