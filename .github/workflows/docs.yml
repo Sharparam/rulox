@@ -24,6 +24,8 @@ jobs:
         with:
           command: doc
           args: --release --workspace --all-features
+      - name: Copy custom redirect page
+        run: cp docs/rulox_redirect.html target/doc/index.html
       - name: Deploy docs
         uses: peaceiris/actions-gh-pages@v3
         with:
