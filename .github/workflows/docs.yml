@@ -1,0 +1,29 @@
+name: docs
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      # - name: Setup Rust toolchain
+      #   uses: actions-rs/toolchain@v1
+      #   with:
+      #     profile: minimal
+      #     toolchain: stable
+      #     override: true
+      - name: Generate docs
+        uses: actions-rs/cargo@v1
+        with:
+          command: doc
+          args: --release --workspace --all-features
+      - name: Deploy docs
+        uses: peaceiris/github-actions-deploy-docs@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./target/doc
+          destination_dir: docs
