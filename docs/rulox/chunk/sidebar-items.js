@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["MAX_CONSTANTS",""]],"enum":[["OpCode",""]],"fn":[["constant_instruction",""],["constant_long_instruction",""],["simple_instruction",""]],"struct":[["Chunk",""]]});
