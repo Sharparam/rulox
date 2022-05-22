@@ -232,10 +232,18 @@ dependencies = [
 name = "rulox"
 version = "0.1.0"
 dependencies = [
- "anyhow",
- "clap",
  "num_enum",
  "thiserror",
+ "tracing",
+]
+
+[[package]]
+name = "rulox-cli"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "rulox",
  "tracing",
  "tracing-subscriber",
 ]

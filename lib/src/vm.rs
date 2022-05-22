@@ -2,7 +2,6 @@ use crate::{
     chunk::{Chunk, OpCode},
     value::Value,
 };
-use anyhow::Result;
 use thiserror::Error;
 use tracing::error;
 
@@ -47,6 +46,7 @@ impl<'a> IP<'a> {
     }
 }
 
+#[derive(Default)]
 pub struct VM;
 
 impl VM {

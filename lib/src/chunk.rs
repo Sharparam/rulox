@@ -1,8 +1,9 @@
 use num_enum::{IntoPrimitive, TryFromPrimitive};
+use thiserror::Error;
 
 use crate::value::Value;
-use anyhow::{bail, Result};
 
+#[derive(Default)]
 pub struct Chunk {
     code: Vec<u8>,
 
@@ -19,6 +20,12 @@ pub enum OpCode {
     ConstantLong,
 
     Return,
+}
+
+#[derive(Error, Clone, Debug)]
+pub enum CompileError {
+    #[error("Too many constants")]
+    TooManyConstants,
 }
 
 // 24 bits
@@ -45,7 +52,7 @@ impl Chunk {
         self.lines.push(line);
     }
 
-    pub fn write_constant(&mut self, value: Value, line: usize) -> Result<()> {
+    pub fn write_constant(&mut self, value: Value, line: usize) -> Result<(), CompileError> {
         let index = self.add_constant(value)?;
         let opcode = if index > u8::MAX as usize {
             OpCode::ConstantLong
@@ -69,9 +76,9 @@ impl Chunk {
         Ok(())
     }
 
-    fn add_constant(&mut self, value: Value) -> Result<usize> {
+    fn add_constant(&mut self, value: Value) -> Result<usize, CompileError> {
         if self.constants.len() >= MAX_CONSTANTS {
-            bail!("Too many constants!");
+            return Err(CompileError::TooManyConstants);
         }
 
         self.constants.push(value);

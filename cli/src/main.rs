@@ -1,21 +1,19 @@
-mod chunk;
 mod cli;
 mod logging;
-mod value;
-mod vm;
 
 use std::{
     fs,
     io::{self, Read},
 };
 
-use crate::{
-    chunk::{Chunk, OpCode},
-    cli::Args,
-    value::Value,
-};
+use crate::cli::Args;
 use anyhow::{Context, Result};
 use clap::Parser;
+use rulox::{
+    chunk::{Chunk, OpCode},
+    value::Value,
+    vm,
+};
 use tracing::{info, Level};
 
 fn main() -> Result<()> {
