@@ -1,3 +1,0 @@
-(function() {var implementors = {};
-implementors["rulox"] = [{"text":"impl <a class=\"trait\" href=\"clap/derive/trait.ArgEnum.html\" title=\"trait clap::derive::ArgEnum\">ArgEnum</a> for <a class=\"enum\" href=\"rulox/cli/enum.LogLevel.html\" title=\"enum rulox::cli::LogLevel\">LogLevel</a>","synthetic":false,"types":["rulox::cli::LogLevel"]}];
-if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["VmError",""]],"struct":[["IP",""],["VM",""]],"type":[["InterpretResult",""]]});
+initSidebarItems({"enum":[["VmError",""]],"struct":[["VM",""]],"type":[["InterpretResult",""]]});
