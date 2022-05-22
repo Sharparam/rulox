@@ -30,7 +30,9 @@ fn main() -> Result<()> {
     info!("Program loaded! Contents:");
     println!("{}", contents);
 
-    let mut vm = vm::VM::new();
+    let mut out = &mut io::stdout();
+    let mut err = &mut io::stderr();
+    let mut vm = vm::VM::new(&mut out, &mut err);
 
     let mut chunk = Chunk::new();
 

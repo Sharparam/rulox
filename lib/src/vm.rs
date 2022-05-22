@@ -1,3 +1,5 @@
+use std::io::{self, Write};
+
 use crate::{
     chunk::{Chunk, OpCode},
     value::Value,
@@ -5,16 +7,31 @@ use crate::{
 use thiserror::Error;
 use tracing::error;
 
-#[derive(Error, Clone, Debug)]
+#[derive(Error, Debug)]
 pub enum VmError {
     #[error("Compilation error")]
     Compilation,
 
-    #[error("Runtime error")]
-    Runtime,
+    #[error("Runtime error: {}", .0)]
+    Runtime(#[from] RuntimeError),
+}
+
+#[derive(Error, Debug)]
+pub enum RuntimeError {
+    #[error("Invalid opcode: {}", .0)]
+    InvalidOpCode(u8),
+
+    #[error("Input/Output failure")]
+    Io(#[from] io::Error),
 }
 
 pub type InterpretResult = Result<(), VmError>;
+
+impl From<io::Error> for VmError {
+    fn from(error: io::Error) -> Self {
+        Self::Runtime(RuntimeError::Io(error))
+    }
+}
 
 struct IP<'a> {
     chunk: &'a Chunk,
@@ -46,12 +63,14 @@ impl<'a> IP<'a> {
     }
 }
 
-#[derive(Default)]
-pub struct VM;
+pub struct VM<'a, O: Write, E: Write> {
+    out: &'a mut O,
+    err: &'a mut E,
+}
 
-impl VM {
-    pub fn new() -> Self {
-        Self
+impl<'a, O: Write, E: Write> VM<'a, O, E> {
+    pub fn new(out: &'a mut O, err: &'a mut E) -> Self {
+        Self { out, err }
     }
 
     pub fn interpret(&mut self, chunk: &Chunk) -> InterpretResult {
@@ -70,17 +89,17 @@ impl VM {
 
                 Ok(OpCode::Constant) => {
                     let value = ip.read_constant(false);
-                    println!("CONSTANT: {:?}", value);
+                    writeln!(self.out, "CONSTANT: {:?}", value)?;
                 }
 
                 Ok(OpCode::ConstantLong) => {
                     let value = ip.read_constant(true);
-                    println!("CONSTANT (LONG): {:?}", value);
+                    writeln!(self.out, "CONSTANT (LONG): {:?}", value)?;
                 }
 
                 Err(_) => {
                     error!("Invalid opcode: {:?}", opcode);
-                    return Err(VmError::Runtime);
+                    return Err(VmError::Runtime(RuntimeError::InvalidOpCode(instruction)));
                 }
             }
         }
