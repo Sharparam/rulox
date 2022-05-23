@@ -3,5 +3,8 @@
     "editor.defaultFormatter": "rust-lang.rust-analyzer",
     "editor.formatOnPaste": true,
     "editor.formatOnSave": true
-  }
+  },
+  "rust-analyzer.cargo.features": [
+    "trace"
+  ]
 }

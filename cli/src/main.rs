@@ -11,7 +11,6 @@ use anyhow::{Context, Result};
 use clap::Parser;
 use rulox::{
     chunk::{Chunk, OpCode},
-    value::Value,
     vm,
 };
 use tracing::{info, Level};
@@ -36,8 +35,16 @@ fn main() -> Result<()> {
 
     let mut chunk = Chunk::new();
 
-    chunk.write_constant(Value::Number(1.2), 1)?;
-    chunk.write(OpCode::Return, 2);
+    chunk.write_constant(1.2, 1)?;
+    chunk.write_constant(3.4, 1)?;
+    chunk.write(OpCode::Add, 1);
+
+    chunk.write_constant(5.6, 1)?;
+    chunk.write(OpCode::Divide, 1);
+
+    chunk.write(OpCode::Negate, 1);
+
+    chunk.write(OpCode::Return, 100);
 
     if args.disassemble {
         chunk.disassemble("test chunk");

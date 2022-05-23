@@ -7,6 +7,7 @@ use crate::{
 use thiserror::Error;
 use tracing::error;
 
+/// Errors that can occur when the VM executes.
 #[derive(Error, Debug)]
 pub enum VmError {
     #[error("Compilation error")]
@@ -16,10 +17,17 @@ pub enum VmError {
     Runtime(#[from] RuntimeError),
 }
 
+/// Errors that can occur during runtime.
 #[derive(Error, Debug)]
 pub enum RuntimeError {
     #[error("Invalid opcode: {}", .0)]
     InvalidOpCode(u8),
+
+    #[error("Attempt to pop value from empty stack")]
+    PoppedEmptyStack,
+
+    #[error("Type error")]
+    TypeError,
 
     #[error("Input/Output failure")]
     Io(#[from] io::Error),
@@ -61,16 +69,25 @@ impl<'a> IP<'a> {
 
         self.chunk.constants[index]
     }
+
+    fn offset(&self) -> usize {
+        self.offset
+    }
 }
 
 pub struct VM<'a, O: Write, E: Write> {
+    stack: Vec<Value>,
     out: &'a mut O,
     err: &'a mut E,
 }
 
 impl<'a, O: Write, E: Write> VM<'a, O, E> {
     pub fn new(out: &'a mut O, err: &'a mut E) -> Self {
-        Self { out, err }
+        Self {
+            stack: Vec::new(),
+            out,
+            err,
+        }
     }
 
     pub fn interpret(&mut self, chunk: &Chunk) -> InterpretResult {
@@ -78,23 +95,50 @@ impl<'a, O: Write, E: Write> VM<'a, O, E> {
     }
 
     fn run(&mut self, chunk: &Chunk) -> InterpretResult {
+        macro_rules! binary_op {
+            ($op:tt) => { {
+                let right: f64 = self.pop_stack()?.try_into()?;
+                let left: f64 = self.pop_stack()?.try_into()?;
+                let result = left $op right;
+                self.stack.push(result.into());
+            } };
+        }
+
         let mut ip = IP::new(chunk, 0);
         loop {
+            #[cfg(feature = "trace")]
+            {
+                self.print_stack()?;
+                chunk.disassemble_instruction(ip.offset());
+            }
+
             let instruction = ip.read();
             let opcode = OpCode::try_from(instruction);
             match opcode {
                 Ok(OpCode::Return) => {
+                    let value = self.pop_stack()?;
+                    writeln!(self.out, "{}", value)?;
                     return Ok(());
                 }
 
                 Ok(OpCode::Constant) => {
                     let value = ip.read_constant(false);
-                    writeln!(self.out, "CONSTANT: {:?}", value)?;
+                    self.stack.push(value);
                 }
 
                 Ok(OpCode::ConstantLong) => {
                     let value = ip.read_constant(true);
-                    writeln!(self.out, "CONSTANT (LONG): {:?}", value)?;
+                    self.stack.push(value);
+                }
+
+                Ok(OpCode::Add) => binary_op!(+),
+                Ok(OpCode::Subtract) => binary_op!(-),
+                Ok(OpCode::Multiply) => binary_op!(*),
+                Ok(OpCode::Divide) => binary_op!(/),
+
+                Ok(OpCode::Negate) => {
+                    let value: f64 = self.pop_stack()?.try_into()?;
+                    self.stack.push((-value).into());
                 }
 
                 Err(_) => {
@@ -103,5 +147,24 @@ impl<'a, O: Write, E: Write> VM<'a, O, E> {
                 }
             }
         }
+    }
+
+    fn pop_stack(&mut self) -> Result<Value, VmError> {
+        if let Some(value) = self.stack.pop() {
+            Ok(value)
+        } else {
+            Err(VmError::Runtime(RuntimeError::PoppedEmptyStack))
+        }
+    }
+
+    fn print_stack(&mut self) -> Result<(), io::Error> {
+        write!(self.err, "          ")?;
+        for value in &self.stack {
+            write!(self.err, "[ {value} ]")?;
+        }
+
+        writeln!(self.err)?;
+
+        Ok(())
     }
 }

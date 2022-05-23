@@ -10,6 +10,9 @@ license = "MPL-2.0"
 keywords = ["lox", "language"]
 categories = ["compilers"]
 
+[features]
+trace = []
+
 [dependencies]
 num_enum = "0.5.7"
 thiserror = "1.0.31"
