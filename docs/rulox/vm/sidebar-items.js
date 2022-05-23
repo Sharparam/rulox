@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["VmError",""]],"struct":[["VM",""]],"type":[["InterpretResult",""]]});
+initSidebarItems({"enum":[["RuntimeError",""],["VmError",""]],"struct":[["VM",""]],"type":[["InterpretResult",""]]});
