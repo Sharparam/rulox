@@ -22,6 +22,10 @@ pub struct Args {
     /// Log level to use
     #[clap(short, long, arg_enum, default_value_t = LogLevel::Warn)]
     level: LogLevel,
+
+    /// Disassemble the input program
+    #[clap(short, long)]
+    pub disassemble: bool,
 }
 
 impl Args {

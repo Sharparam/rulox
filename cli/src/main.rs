@@ -39,11 +39,12 @@ fn main() -> Result<()> {
     chunk.write_constant(Value::Number(1.2), 1)?;
     chunk.write(OpCode::Return, 2);
 
-    chunk.disassemble("test chunk");
-
-    info!("Running chunk:");
-
-    vm.interpret(&chunk)?;
+    if args.disassemble {
+        chunk.disassemble("test chunk");
+    } else {
+        info!("Running chunk:");
+        vm.interpret(&chunk)?;
+    }
 
     Ok(())
 }
