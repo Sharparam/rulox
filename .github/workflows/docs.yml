@@ -23,7 +23,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: doc
-          args: --release --workspace --all-features
+          args: --release --workspace
       - name: Copy custom redirect page
         run: cp docs/rulox_redirect.html target/doc/index.html
       - name: Deploy docs
