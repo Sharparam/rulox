@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["chunk",""],["value",""],["vm",""]]});
+initSidebarItems({"mod":[["compiler",""],["scanner",""],["value",""],["vm",""]]});

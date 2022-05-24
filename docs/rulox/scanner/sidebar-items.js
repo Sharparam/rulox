@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["TokenType",""]],"struct":[["Scanner",""],["Token",""]]});
