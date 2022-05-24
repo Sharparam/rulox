@@ -1,6 +1,10 @@
 use clap::{ArgEnum, Parser};
 use tracing::Level;
 
+// pub const EX_DATAERR: u8 = 65;
+// pub const EX_SOFTWARE: u8 = 70;
+// pub const EX_IOERR: u8 = 74;
+
 #[derive(Parser)]
 #[clap(author, version, about)]
 pub struct Args {

@@ -3,17 +3,17 @@ mod logging;
 
 use std::{
     fs,
-    io::{self, Read},
+    io::{self, Read, Write},
 };
 
 use crate::cli::Args;
 use anyhow::{Context, Result};
 use clap::Parser;
 use rulox::{
-    compiler::{Chunk, OpCode},
-    vm,
+    compiler,
+    vm::{self, InterpretResult},
 };
-use tracing::{info, Level};
+use tracing::Level;
 
 fn main() -> Result<()> {
     let args = Args::parse();
@@ -24,34 +24,36 @@ fn main() -> Result<()> {
     };
     logging::init_logging(log_level);
 
-    let contents = get_program_contents(&args).context("Failed to get program contents")?;
-
-    info!("Program loaded! Contents:");
-    println!("{}", contents);
-
     let mut out = &mut io::stdout();
     let mut err = &mut io::stderr();
     let mut vm = vm::VM::new(&mut out, &mut err);
 
-    let mut chunk = Chunk::new();
-
-    chunk.write_constant(1.2, 1)?;
-    chunk.write_constant(3.4, 1)?;
-    chunk.write(OpCode::Add, 1);
-
-    chunk.write_constant(5.6, 1)?;
-    chunk.write(OpCode::Divide, 1);
-
-    chunk.write(OpCode::Negate, 1);
-
-    chunk.write(OpCode::Return, 100);
-
-    if args.disassemble {
-        chunk.disassemble("test chunk");
-    } else {
-        info!("Running chunk:");
-        vm.interpret(&chunk)?;
+    if args.repl {
+        return repl();
     }
+
+    let contents = get_program_contents(&args).context("Failed to get program contents")?;
+
+    interpret(&contents).context("Failed to interpret source")
+}
+
+fn repl() -> Result<()> {
+    loop {
+        print!("> ");
+        io::stdout().flush()?;
+
+        let stdin = io::stdin();
+        let mut input = String::new();
+        if stdin.read_line(&mut input).is_ok() {
+            interpret(&input)?;
+        } else {
+            println!();
+        }
+    }
+}
+
+fn interpret(source: &str) -> InterpretResult {
+    compiler::compile(source);
 
     Ok(())
 }

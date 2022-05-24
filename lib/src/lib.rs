@@ -17,5 +17,6 @@ It is a Rust implementation of the bytecode virtual machine described in the boo
 */
 
 pub mod compiler;
+pub mod scanner;
 pub mod value;
 pub mod vm;
