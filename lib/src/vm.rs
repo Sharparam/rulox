@@ -1,7 +1,7 @@
 use std::io::{self, Write};
 
 use crate::{
-    chunk::{Chunk, OpCode},
+    compiler::{Chunk, OpCode},
     value::Value,
 };
 use thiserror::Error;

@@ -10,7 +10,7 @@ use crate::cli::Args;
 use anyhow::{Context, Result};
 use clap::Parser;
 use rulox::{
-    chunk::{Chunk, OpCode},
+    compiler::{Chunk, OpCode},
     vm,
 };
 use tracing::{info, Level};

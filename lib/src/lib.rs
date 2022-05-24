@@ -16,6 +16,6 @@ It is a Rust implementation of the bytecode virtual machine described in the boo
 [bob]: https://stuffwithstuff.com/
 */
 
-pub mod chunk;
+pub mod compiler;
 pub mod value;
 pub mod vm;
