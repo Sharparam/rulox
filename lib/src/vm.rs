@@ -1,4 +1,7 @@
-use std::io::{self, Write};
+use std::{
+    io::{self, Write},
+    process::ExitCode,
+};
 
 use crate::{
     compiler::{Chunk, OpCode},
@@ -8,7 +11,7 @@ use thiserror::Error;
 use tracing::error;
 
 /// Errors that can occur when the VM executes.
-#[derive(Error, Debug)]
+#[derive(Error, Debug, Copy, Clone)]
 pub enum VmError {
     #[error("Compilation error")]
     Compilation,
@@ -18,7 +21,7 @@ pub enum VmError {
 }
 
 /// Errors that can occur during runtime.
-#[derive(Error, Debug)]
+#[derive(Error, Debug, Copy, Clone)]
 pub enum RuntimeError {
     #[error("Invalid opcode: {}", .0)]
     InvalidOpCode(u8),
@@ -30,14 +33,23 @@ pub enum RuntimeError {
     TypeError,
 
     #[error("Input/Output failure")]
-    Io(#[from] io::Error),
+    Io,
 }
 
 pub type InterpretResult = Result<(), VmError>;
 
 impl From<io::Error> for VmError {
-    fn from(error: io::Error) -> Self {
-        Self::Runtime(RuntimeError::Io(error))
+    fn from(_: io::Error) -> Self {
+        Self::Runtime(RuntimeError::Io)
+    }
+}
+
+impl From<VmError> for ExitCode {
+    fn from(error: VmError) -> Self {
+        match error {
+            VmError::Compilation => ExitCode::from(65),
+            VmError::Runtime(_) => ExitCode::from(70),
+        }
     }
 }
 

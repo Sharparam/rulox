@@ -4,6 +4,7 @@ mod logging;
 use std::{
     fs,
     io::{self, Read, Write},
+    process::ExitCode,
 };
 
 use crate::cli::Args;
@@ -11,12 +12,40 @@ use anyhow::{Context, Result};
 use clap::Parser;
 use rulox::{
     compiler,
-    vm::{self, InterpretResult},
+    vm::{self, InterpretResult, VmError},
 };
 use tracing::Level;
 
-fn main() -> Result<()> {
-    let args = Args::parse();
+fn main() -> ExitCode {
+    if let Err(err) = try_main() {
+        if let Some(clap_err) = err.root_cause().downcast_ref::<clap::error::Error>() {
+            clap_err.print().unwrap();
+            return match clap_err.kind() {
+                clap::ErrorKind::DisplayHelp | clap::ErrorKind::DisplayVersion => ExitCode::SUCCESS,
+                _ => ExitCode::from(64),
+            };
+        }
+
+        eprintln!("Error: {:?}", err);
+
+        for cause in err.chain() {
+            if let Some(vm_err) = cause.downcast_ref::<VmError>() {
+                return (*vm_err).into();
+            }
+
+            if cause.downcast_ref::<io::Error>().is_some() {
+                return ExitCode::from(66);
+            }
+        }
+
+        ExitCode::FAILURE
+    } else {
+        ExitCode::SUCCESS
+    }
+}
+
+fn try_main() -> Result<()> {
+    let args = Args::try_parse()?;
     let log_level = if args.verbose {
         Level::TRACE
     } else {
