@@ -201,7 +201,43 @@ impl<'a> Scanner<'a> {
     }
 
     fn identifier_type(&self) -> TokenType {
-        TokenType::Identifier
+        match self.source.chars().nth(self.start) {
+            Some('a') => self.check_keyword(1, "nd", TokenType::And),
+            Some('c') => self.check_keyword(1, "lass", TokenType::Class),
+            Some('e') => self.check_keyword(1, "lse", TokenType::Else),
+            Some('i') => self.check_keyword(1, "f", TokenType::If),
+            Some('n') => self.check_keyword(1, "il", TokenType::Nil),
+            Some('o') => self.check_keyword(1, "r", TokenType::Or),
+            Some('p') => self.check_keyword(1, "rint", TokenType::Print),
+            Some('r') => self.check_keyword(1, "eturn", TokenType::Return),
+            Some('s') => self.check_keyword(1, "uper", TokenType::Super),
+            Some('v') => self.check_keyword(1, "ar", TokenType::Var),
+            Some('w') => self.check_keyword(1, "hile", TokenType::While),
+            Some('f') => match self.source.chars().nth(self.start + 1) {
+                Some('a') => self.check_keyword(2, "lse", TokenType::False),
+                Some('o') => self.check_keyword(2, "r", TokenType::For),
+                Some('u') => self.check_keyword(2, "n", TokenType::Fun),
+                _ => TokenType::Identifier,
+            },
+            Some('t') => match self.source.chars().nth(self.start + 1) {
+                Some('h') => self.check_keyword(2, "is", TokenType::This),
+                Some('r') => self.check_keyword(2, "ue", TokenType::True),
+                _ => TokenType::Identifier,
+            },
+            _ => TokenType::Identifier,
+        }
+    }
+
+    fn check_keyword(&self, start: usize, rest: &str, token_type: TokenType) -> TokenType {
+        let len = rest.len();
+        let slice = self
+            .source
+            .get(self.start + start..self.start + start + len);
+
+        match slice {
+            Some(s) if s == rest => token_type,
+            _ => TokenType::Identifier,
+        }
     }
 
     fn error_token(&self, message: &'a str) -> Token {
