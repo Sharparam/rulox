@@ -1,8 +1,8 @@
 var N = null;var sourcesIndex = {};
 sourcesIndex["cfg_if"] = {"name":"","files":["lib.rs"]};
-sourcesIndex["lazy_static"] = {"name":"","files":["inline_lazy.rs","lib.rs"]};
 sourcesIndex["num_enum"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["num_enum_derive"] = {"name":"","files":["lib.rs"]};
+sourcesIndex["once_cell"] = {"name":"","files":["imp_std.rs","lib.rs","race.rs"]};
 sourcesIndex["pin_project_lite"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["proc_macro2"] = {"name":"","files":["detection.rs","fallback.rs","lib.rs","marker.rs","parse.rs","wrapper.rs"]};
 sourcesIndex["proc_macro_crate"] = {"name":"","files":["lib.rs"]};
@@ -15,6 +15,6 @@ sourcesIndex["thiserror_impl"] = {"name":"","files":["ast.rs","attr.rs","expand.
 sourcesIndex["toml"] = {"name":"","files":["datetime.rs","de.rs","lib.rs","macros.rs","map.rs","ser.rs","spanned.rs","tokens.rs","value.rs"]};
 sourcesIndex["tracing"] = {"name":"","files":["dispatcher.rs","field.rs","instrument.rs","level_filters.rs","lib.rs","macros.rs","span.rs","stdlib.rs","subscriber.rs"]};
 sourcesIndex["tracing_attributes"] = {"name":"","files":["attr.rs","expand.rs","lib.rs"]};
-sourcesIndex["tracing_core"] = {"name":"","files":["callsite.rs","dispatcher.rs","event.rs","field.rs","lib.rs","metadata.rs","parent.rs","span.rs","stdlib.rs","subscriber.rs"]};
+sourcesIndex["tracing_core"] = {"name":"","files":["callsite.rs","dispatcher.rs","event.rs","field.rs","lazy.rs","lib.rs","metadata.rs","parent.rs","span.rs","stdlib.rs","subscriber.rs"]};
 sourcesIndex["unicode_xid"] = {"name":"","files":["lib.rs","tables.rs"]};
 createSourceSidebar();
