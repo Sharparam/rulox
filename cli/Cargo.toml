@@ -16,7 +16,7 @@ path = "src/main.rs"
 doc = false
 
 [dependencies]
-anyhow = "1.0.57"
+anyhow = "1.0.58"
 clap = { version = "3.1.18", features = ["derive"] }
 rulox = { path = "../lib" }
 tracing = "0.1.34"
