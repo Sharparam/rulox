@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["TokenType",""]],"struct":[["Scanner",""],["Token",""]]});
+window.SIDEBAR_ITEMS = {"enum":[["TokenType",""]],"struct":[["Scanner",""],["Token",""]]};

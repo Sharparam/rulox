@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["RuntimeError","Errors that can occur during runtime."],["VmError","Errors that can occur when the VM executes."]],"struct":[["VM",""]],"type":[["InterpretResult",""]]});
+window.SIDEBAR_ITEMS = {"enum":[["RuntimeError","Errors that can occur during runtime."],["VmError","Errors that can occur when the VM executes."]],"struct":[["VM",""]],"type":[["InterpretResult",""]]};

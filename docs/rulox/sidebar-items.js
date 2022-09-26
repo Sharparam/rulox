@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["compiler",""],["scanner",""],["value",""],["vm",""]]});
+window.SIDEBAR_ITEMS = {"mod":[["compiler",""],["scanner",""],["value",""],["vm",""]]};
