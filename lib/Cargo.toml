@@ -15,5 +15,5 @@ trace = []
 
 [dependencies]
 num_enum = "0.5.7"
-thiserror = "1.0.36"
+thiserror = "1.0.37"
 tracing = "0.1.36"
