@@ -181,10 +181,10 @@ tracking the current span accordingly.</p>
 from ever being dropped.</p>
 <p>Instead, when it is necessary to store a cyclical reference to the
 <code>Dispatch</code> within a <code>Subscriber</code>, use <a href="struct.Dispatch.html#method.downgrade" title="Dispatch::downgrade"><code>Dispatch::downgrade</code></a> to convert a
-<code>Dispatch</code> into a <a href="../tracing_core/dispatcher/struct.WeakDispatch.html"><code>WeakDispatch</code></a>. This type is analogous to
+<code>Dispatch</code> into a <a href="dispatcher/struct.WeakDispatch.html"><code>WeakDispatch</code></a>. This type is analogous to
 <a href="https://doc.rust-lang.org/1.64.0/alloc/sync/struct.Weak.html" title="std::sync::Weak"><code>std::sync::Weak</code></a>, and does not create a reference count cycle. A
-<a href="../tracing_core/dispatcher/struct.WeakDispatch.html"><code>WeakDispatch</code></a> can be stored within a <code>Subscriber</code> without causing a
-memory leak, and can be <a href="../tracing_core/dispatcher/struct.WeakDispatch.html#method.upgrade">upgraded</a> into a <code>Dispatch</code> temporarily when
+<a href="dispatcher/struct.WeakDispatch.html"><code>WeakDispatch</code></a> can be stored within a <code>Subscriber</code> without causing a
+memory leak, and can be <a href="dispatcher/struct.WeakDispatch.html#method.upgrade">upgraded</a> into a <code>Dispatch</code> temporarily when
 the <code>Dispatch</code> must be accessed by the <code>Subscriber</code>.</p>
 </div></details><details class="rustdoc-toggle" open><summary><div id="method.register_callsite" class="method has-srclink"><div class="rightside"><a class="srclink" href="../src/tracing_core/subscriber.rs.html#178">source</a></div><h4 class="code-header">fn <a href="#method.register_callsite" class="fnname">register_callsite</a>(&amp;self, metadata: &amp;'static <a class="struct" href="struct.Metadata.html" title="struct tracing::Metadata">Metadata</a>&lt;'static&gt;) -&gt; <a class="struct" href="subscriber/struct.Interest.html" title="struct tracing::subscriber::Interest">Interest</a></h4></div></summary><div class="docblock"><p>Registers a new <a href="../tracing_core/callsite/index.html">callsite</a> with this subscriber, returning whether or not
 the subscriber is interested in being notified about the callsite.</p>

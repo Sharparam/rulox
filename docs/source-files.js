@@ -4,7 +4,7 @@ var sourcesIndex = JSON.parse('{\
 "num_enum_derive":["",[],["lib.rs"]],\
 "once_cell":["",[],["imp_std.rs","lib.rs","race.rs"]],\
 "pin_project_lite":["",[],["lib.rs"]],\
-"proc_macro2":["",[],["detection.rs","fallback.rs","lib.rs","marker.rs","parse.rs","wrapper.rs"]],\
+"proc_macro2":["",[],["detection.rs","fallback.rs","lib.rs","marker.rs","parse.rs","rcvec.rs","wrapper.rs"]],\
 "proc_macro_crate":["",[],["lib.rs"]],\
 "quote":["",[],["ext.rs","format.rs","ident_fragment.rs","lib.rs","runtime.rs","spanned.rs","to_tokens.rs"]],\
 "rulox":["",[],["compiler.rs","lib.rs","scanner.rs","value.rs","vm.rs"]],\
@@ -16,6 +16,6 @@ var sourcesIndex = JSON.parse('{\
 "tracing":["",[],["dispatcher.rs","field.rs","instrument.rs","level_filters.rs","lib.rs","macros.rs","span.rs","stdlib.rs","subscriber.rs"]],\
 "tracing_attributes":["",[],["attr.rs","expand.rs","lib.rs"]],\
 "tracing_core":["",[],["callsite.rs","dispatcher.rs","event.rs","field.rs","lazy.rs","lib.rs","metadata.rs","parent.rs","span.rs","stdlib.rs","subscriber.rs"]],\
-"unicode_xid":["",[],["lib.rs","tables.rs"]]\
+"unicode_ident":["",[],["lib.rs","tables.rs"]]\
 }');
 createSourceSidebar();
