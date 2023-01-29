@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lib/src/scanner.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>scanner.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../rulox/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../rulox/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../rulox/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lib/src/scanner.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>scanner.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../rulox/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -298,305 +298,305 @@
 <span id="298">298</span>
 <span id="299">299</span>
 <span id="300">300</span>
-</pre><pre class="rust"><code><span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Scanner</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>,
-    <span class="ident">start</span>: <span class="ident">usize</span>,
-    <span class="ident">current</span>: <span class="ident">usize</span>,
-    <span class="ident">line</span>: <span class="ident">i32</span>,
+</pre><pre class="rust"><code><span class="kw">pub struct </span>Scanner&lt;<span class="lifetime">&#39;a</span>&gt; {
+    source: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str,
+    start: usize,
+    current: usize,
+    line: i32,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Scanner</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">source</span>,
-            <span class="ident">start</span>: <span class="number">0</span>,
-            <span class="ident">current</span>: <span class="number">0</span>,
-            <span class="ident">line</span>: <span class="number">1</span>,
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Scanner&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="kw">pub fn </span>new(source: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            source,
+            start: <span class="number">0</span>,
+            current: <span class="number">0</span>,
+            line: <span class="number">1</span>,
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">scan_token</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">Token</span> {
-        <span class="self">self</span>.<span class="ident">skip_whitespace</span>();
-        <span class="self">self</span>.<span class="ident">start</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">current</span>;
+    <span class="kw">pub fn </span>scan_token(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; Token {
+        <span class="self">self</span>.skip_whitespace();
+        <span class="self">self</span>.start = <span class="self">self</span>.current;
 
-        <span class="kw">let</span> <span class="ident">c</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">c</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">advance</span>() {
-            <span class="ident">c</span>
-        } <span class="kw">else</span> {
-            <span class="kw">return</span> <span class="self">self</span>.<span class="ident">make_eof</span>();
+        <span class="kw">let </span>c = <span class="kw">if let </span><span class="prelude-val">Some</span>(c) = <span class="self">self</span>.advance() {
+            c
+        } <span class="kw">else </span>{
+            <span class="kw">return </span><span class="self">self</span>.make_eof();
         };
 
-        <span class="kw">match</span> <span class="ident">c</span> {
-            <span class="string">&#39;(&#39;</span> =&gt; <span class="self">self</span>.<span class="ident">make_token</span>(<span class="ident">TokenType::LeftParen</span>),
-            <span class="string">&#39;)&#39;</span> =&gt; <span class="self">self</span>.<span class="ident">make_token</span>(<span class="ident">TokenType::RightParen</span>),
-            <span class="string">&#39;{&#39;</span> =&gt; <span class="self">self</span>.<span class="ident">make_token</span>(<span class="ident">TokenType::LeftBrace</span>),
-            <span class="string">&#39;}&#39;</span> =&gt; <span class="self">self</span>.<span class="ident">make_token</span>(<span class="ident">TokenType::RightBrace</span>),
-            <span class="string">&#39;;&#39;</span> =&gt; <span class="self">self</span>.<span class="ident">make_token</span>(<span class="ident">TokenType::Semicolon</span>),
-            <span class="string">&#39;,&#39;</span> =&gt; <span class="self">self</span>.<span class="ident">make_token</span>(<span class="ident">TokenType::Comma</span>),
-            <span class="string">&#39;.&#39;</span> =&gt; <span class="self">self</span>.<span class="ident">make_token</span>(<span class="ident">TokenType::Dot</span>),
-            <span class="string">&#39;-&#39;</span> =&gt; <span class="self">self</span>.<span class="ident">make_token</span>(<span class="ident">TokenType::Minus</span>),
-            <span class="string">&#39;+&#39;</span> =&gt; <span class="self">self</span>.<span class="ident">make_token</span>(<span class="ident">TokenType::Plus</span>),
-            <span class="string">&#39;/&#39;</span> =&gt; <span class="self">self</span>.<span class="ident">make_token</span>(<span class="ident">TokenType::Slash</span>),
-            <span class="string">&#39;*&#39;</span> =&gt; <span class="self">self</span>.<span class="ident">make_token</span>(<span class="ident">TokenType::Star</span>),
-            <span class="string">&#39;!&#39;</span> =&gt; {
-                <span class="kw">let</span> <span class="ident">next_equal</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">match_char</span>(<span class="string">&#39;=&#39;</span>);
-                <span class="kw">if</span> <span class="ident">next_equal</span> {
-                    <span class="self">self</span>.<span class="ident">make_token</span>(<span class="ident">TokenType::BangEqual</span>)
-                } <span class="kw">else</span> {
-                    <span class="self">self</span>.<span class="ident">make_token</span>(<span class="ident">TokenType::Bang</span>)
+        <span class="kw">match </span>c {
+            <span class="string">&#39;(&#39; </span>=&gt; <span class="self">self</span>.make_token(TokenType::LeftParen),
+            <span class="string">&#39;)&#39; </span>=&gt; <span class="self">self</span>.make_token(TokenType::RightParen),
+            <span class="string">&#39;{&#39; </span>=&gt; <span class="self">self</span>.make_token(TokenType::LeftBrace),
+            <span class="string">&#39;}&#39; </span>=&gt; <span class="self">self</span>.make_token(TokenType::RightBrace),
+            <span class="string">&#39;;&#39; </span>=&gt; <span class="self">self</span>.make_token(TokenType::Semicolon),
+            <span class="string">&#39;,&#39; </span>=&gt; <span class="self">self</span>.make_token(TokenType::Comma),
+            <span class="string">&#39;.&#39; </span>=&gt; <span class="self">self</span>.make_token(TokenType::Dot),
+            <span class="string">&#39;-&#39; </span>=&gt; <span class="self">self</span>.make_token(TokenType::Minus),
+            <span class="string">&#39;+&#39; </span>=&gt; <span class="self">self</span>.make_token(TokenType::Plus),
+            <span class="string">&#39;/&#39; </span>=&gt; <span class="self">self</span>.make_token(TokenType::Slash),
+            <span class="string">&#39;*&#39; </span>=&gt; <span class="self">self</span>.make_token(TokenType::Star),
+            <span class="string">&#39;!&#39; </span>=&gt; {
+                <span class="kw">let </span>next_equal = <span class="self">self</span>.match_char(<span class="string">&#39;=&#39;</span>);
+                <span class="kw">if </span>next_equal {
+                    <span class="self">self</span>.make_token(TokenType::BangEqual)
+                } <span class="kw">else </span>{
+                    <span class="self">self</span>.make_token(TokenType::Bang)
                 }
             }
-            <span class="string">&#39;=&#39;</span> =&gt; {
-                <span class="kw">let</span> <span class="ident">next_equal</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">match_char</span>(<span class="string">&#39;=&#39;</span>);
-                <span class="kw">if</span> <span class="ident">next_equal</span> {
-                    <span class="self">self</span>.<span class="ident">make_token</span>(<span class="ident">TokenType::EqualEqual</span>)
-                } <span class="kw">else</span> {
-                    <span class="self">self</span>.<span class="ident">make_token</span>(<span class="ident">TokenType::Equal</span>)
+            <span class="string">&#39;=&#39; </span>=&gt; {
+                <span class="kw">let </span>next_equal = <span class="self">self</span>.match_char(<span class="string">&#39;=&#39;</span>);
+                <span class="kw">if </span>next_equal {
+                    <span class="self">self</span>.make_token(TokenType::EqualEqual)
+                } <span class="kw">else </span>{
+                    <span class="self">self</span>.make_token(TokenType::Equal)
                 }
             }
-            <span class="string">&#39;&lt;&#39;</span> =&gt; {
-                <span class="kw">let</span> <span class="ident">next_equal</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">match_char</span>(<span class="string">&#39;=&#39;</span>);
-                <span class="kw">if</span> <span class="ident">next_equal</span> {
-                    <span class="self">self</span>.<span class="ident">make_token</span>(<span class="ident">TokenType::LessEqual</span>)
-                } <span class="kw">else</span> {
-                    <span class="self">self</span>.<span class="ident">make_token</span>(<span class="ident">TokenType::Less</span>)
+            <span class="string">&#39;&lt;&#39; </span>=&gt; {
+                <span class="kw">let </span>next_equal = <span class="self">self</span>.match_char(<span class="string">&#39;=&#39;</span>);
+                <span class="kw">if </span>next_equal {
+                    <span class="self">self</span>.make_token(TokenType::LessEqual)
+                } <span class="kw">else </span>{
+                    <span class="self">self</span>.make_token(TokenType::Less)
                 }
             }
-            <span class="string">&#39;&gt;&#39;</span> =&gt; {
-                <span class="kw">let</span> <span class="ident">next_equal</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">match_char</span>(<span class="string">&#39;=&#39;</span>);
-                <span class="kw">if</span> <span class="ident">next_equal</span> {
-                    <span class="self">self</span>.<span class="ident">make_token</span>(<span class="ident">TokenType::GreaterEqual</span>)
-                } <span class="kw">else</span> {
-                    <span class="self">self</span>.<span class="ident">make_token</span>(<span class="ident">TokenType::Greater</span>)
+            <span class="string">&#39;&gt;&#39; </span>=&gt; {
+                <span class="kw">let </span>next_equal = <span class="self">self</span>.match_char(<span class="string">&#39;=&#39;</span>);
+                <span class="kw">if </span>next_equal {
+                    <span class="self">self</span>.make_token(TokenType::GreaterEqual)
+                } <span class="kw">else </span>{
+                    <span class="self">self</span>.make_token(TokenType::Greater)
                 }
             }
-            <span class="string">&#39;&quot;&#39;</span> =&gt; <span class="self">self</span>.<span class="ident">string</span>(),
-            <span class="string">&#39;0&#39;</span>..<span class="op">=</span><span class="string">&#39;9&#39;</span> =&gt; <span class="self">self</span>.<span class="ident">number</span>(),
-            <span class="string">&#39;a&#39;</span>..<span class="op">=</span><span class="string">&#39;z&#39;</span> <span class="op">|</span> <span class="string">&#39;A&#39;</span>..<span class="op">=</span><span class="string">&#39;Z&#39;</span> <span class="op">|</span> <span class="string">&#39;_&#39;</span> =&gt; <span class="self">self</span>.<span class="ident">identifier</span>(),
-            <span class="kw">_</span> =&gt; <span class="self">self</span>.<span class="ident">error_token</span>(<span class="string">&quot;Unexpected character.&quot;</span>),
+            <span class="string">&#39;&quot;&#39; </span>=&gt; <span class="self">self</span>.string(),
+            <span class="string">&#39;0&#39;</span>..=<span class="string">&#39;9&#39; </span>=&gt; <span class="self">self</span>.number(),
+            <span class="string">&#39;a&#39;</span>..=<span class="string">&#39;z&#39; </span>| <span class="string">&#39;A&#39;</span>..=<span class="string">&#39;Z&#39; </span>| <span class="string">&#39;_&#39; </span>=&gt; <span class="self">self</span>.identifier(),
+            <span class="kw">_ </span>=&gt; <span class="self">self</span>.error_token(<span class="string">&quot;Unexpected character.&quot;</span>),
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">peek</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">char</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">source</span>.<span class="ident">chars</span>().<span class="ident">nth</span>(<span class="self">self</span>.<span class="ident">current</span>)
+    <span class="kw">fn </span>peek(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;char&gt; {
+        <span class="self">self</span>.source.chars().nth(<span class="self">self</span>.current)
     }
 
-    <span class="kw">fn</span> <span class="ident">peek_next</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">char</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">source</span>.<span class="ident">chars</span>().<span class="ident">nth</span>(<span class="self">self</span>.<span class="ident">current</span> <span class="op">+</span> <span class="number">1</span>)
+    <span class="kw">fn </span>peek_next(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;char&gt; {
+        <span class="self">self</span>.source.chars().nth(<span class="self">self</span>.current + <span class="number">1</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">advance</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">char</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">current</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-        <span class="self">self</span>.<span class="ident">source</span>.<span class="ident">chars</span>().<span class="ident">nth</span>(<span class="self">self</span>.<span class="ident">current</span> <span class="op">-</span> <span class="number">1</span>)
+    <span class="kw">fn </span>advance(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;char&gt; {
+        <span class="self">self</span>.current += <span class="number">1</span>;
+        <span class="self">self</span>.source.chars().nth(<span class="self">self</span>.current - <span class="number">1</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">match_char</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">c</span>: <span class="ident">char</span>) -&gt; <span class="ident">bool</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">current</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">source</span>.<span class="ident">chars</span>().<span class="ident">next</span>() {
-            <span class="kw">if</span> <span class="ident">current</span> <span class="op">!</span><span class="op">=</span> <span class="ident">c</span> {
-                <span class="kw">return</span> <span class="bool-val">false</span>;
+    <span class="kw">fn </span>match_char(<span class="kw-2">&amp;mut </span><span class="self">self</span>, c: char) -&gt; bool {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(current) = <span class="self">self</span>.source.chars().next() {
+            <span class="kw">if </span>current != c {
+                <span class="kw">return </span><span class="bool-val">false</span>;
             }
 
-            <span class="self">self</span>.<span class="ident">current</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+            <span class="self">self</span>.current += <span class="number">1</span>;
 
-            <span class="bool-val">true</span>
-        } <span class="kw">else</span> {
-            <span class="bool-val">false</span>
-        }
+            <span class="bool-val">true
+        </span>} <span class="kw">else </span>{
+            <span class="bool-val">false
+        </span>}
     }
 
-    <span class="kw">fn</span> <span class="ident">skip_whitespace</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
-        <span class="kw">loop</span> {
-            <span class="kw">match</span> <span class="self">self</span>.<span class="ident">peek</span>() {
-                <span class="prelude-val">Some</span>(<span class="string">&#39; &#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;\r&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;\t&#39;</span>) =&gt; {
-                    <span class="self">self</span>.<span class="ident">advance</span>();
+    <span class="kw">fn </span>skip_whitespace(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="kw">loop </span>{
+            <span class="kw">match </span><span class="self">self</span>.peek() {
+                <span class="prelude-val">Some</span>(<span class="string">&#39; &#39;</span>) | <span class="prelude-val">Some</span>(<span class="string">&#39;\r&#39;</span>) | <span class="prelude-val">Some</span>(<span class="string">&#39;\t&#39;</span>) =&gt; {
+                    <span class="self">self</span>.advance();
                 }
                 <span class="prelude-val">Some</span>(<span class="string">&#39;\n&#39;</span>) =&gt; {
-                    <span class="self">self</span>.<span class="ident">line</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-                    <span class="self">self</span>.<span class="ident">advance</span>();
+                    <span class="self">self</span>.line += <span class="number">1</span>;
+                    <span class="self">self</span>.advance();
                 }
                 <span class="prelude-val">Some</span>(<span class="string">&#39;/&#39;</span>) =&gt; {
-                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="string">&#39;/&#39;</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">peek_next</span>() {
-                        <span class="kw">loop</span> {
-                            <span class="kw">match</span> <span class="self">self</span>.<span class="ident">peek</span>() {
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="string">&#39;/&#39;</span>) = <span class="self">self</span>.peek_next() {
+                        <span class="kw">loop </span>{
+                            <span class="kw">match </span><span class="self">self</span>.peek() {
                                 <span class="prelude-val">Some</span>(<span class="string">&#39;\n&#39;</span>) =&gt; <span class="kw">break</span>,
                                 <span class="prelude-val">Some</span>(<span class="kw">_</span>) =&gt; {
-                                    <span class="self">self</span>.<span class="ident">advance</span>();
+                                    <span class="self">self</span>.advance();
                                 }
-                                <span class="prelude-val">None</span> =&gt; <span class="kw">break</span>,
+                                <span class="prelude-val">None </span>=&gt; <span class="kw">break</span>,
                             }
                         }
-                    } <span class="kw">else</span> {
+                    } <span class="kw">else </span>{
                         <span class="kw">return</span>;
                     }
                 }
-                <span class="kw">_</span> =&gt; <span class="kw">return</span>,
+                <span class="kw">_ </span>=&gt; <span class="kw">return</span>,
             }
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">make_token</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">token_type</span>: <span class="ident">TokenType</span>) -&gt; <span class="ident">Token</span> {
-        <span class="kw">let</span> <span class="ident">lexeme</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">source</span>[<span class="self">self</span>.<span class="ident">start</span>..<span class="self">self</span>.<span class="ident">current</span>];
-        <span class="ident">Token</span> {
-            <span class="ident">token_type</span>,
-            <span class="ident">lexeme</span>,
-            <span class="ident">line</span>: <span class="self">self</span>.<span class="ident">line</span>,
+    <span class="kw">fn </span>make_token(<span class="kw-2">&amp;</span><span class="self">self</span>, token_type: TokenType) -&gt; Token {
+        <span class="kw">let </span>lexeme = <span class="kw-2">&amp;</span><span class="self">self</span>.source[<span class="self">self</span>.start..<span class="self">self</span>.current];
+        Token {
+            token_type,
+            lexeme,
+            line: <span class="self">self</span>.line,
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">make_eof</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Token</span> {
-        <span class="ident">Token</span> {
-            <span class="ident">token_type</span>: <span class="ident">TokenType::EOF</span>,
-            <span class="ident">lexeme</span>: <span class="string">&quot;\0&quot;</span>,
-            <span class="ident">line</span>: <span class="self">self</span>.<span class="ident">line</span>,
+    <span class="kw">fn </span>make_eof(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Token {
+        Token {
+            token_type: TokenType::EOF,
+            lexeme: <span class="string">&quot;\0&quot;</span>,
+            line: <span class="self">self</span>.line,
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">string</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">Token</span> {
-        <span class="kw">loop</span> {
-            <span class="kw">match</span> <span class="self">self</span>.<span class="ident">peek</span>() {
+    <span class="kw">fn </span>string(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; Token {
+        <span class="kw">loop </span>{
+            <span class="kw">match </span><span class="self">self</span>.peek() {
                 <span class="prelude-val">Some</span>(<span class="string">&#39;&quot;&#39;</span>) =&gt; {
-                    <span class="self">self</span>.<span class="ident">advance</span>();
+                    <span class="self">self</span>.advance();
                     <span class="kw">break</span>;
                 }
                 <span class="prelude-val">Some</span>(<span class="string">&#39;\n&#39;</span>) =&gt; {
-                    <span class="self">self</span>.<span class="ident">line</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-                    <span class="self">self</span>.<span class="ident">advance</span>();
+                    <span class="self">self</span>.line += <span class="number">1</span>;
+                    <span class="self">self</span>.advance();
                 }
                 <span class="prelude-val">Some</span>(<span class="kw">_</span>) =&gt; {
-                    <span class="self">self</span>.<span class="ident">advance</span>();
+                    <span class="self">self</span>.advance();
                 }
-                <span class="prelude-val">None</span> =&gt; {
-                    <span class="kw">return</span> <span class="self">self</span>.<span class="ident">error_token</span>(<span class="string">&quot;Unterminated string.&quot;</span>);
+                <span class="prelude-val">None </span>=&gt; {
+                    <span class="kw">return </span><span class="self">self</span>.error_token(<span class="string">&quot;Unterminated string.&quot;</span>);
                 }
             }
         }
 
-        <span class="self">self</span>.<span class="ident">make_token</span>(<span class="ident">TokenType::String</span>)
+        <span class="self">self</span>.make_token(TokenType::String)
     }
 
-    <span class="kw">fn</span> <span class="ident">number</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">Token</span> {
-        <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="string">&#39;0&#39;</span>..<span class="op">=</span><span class="string">&#39;9&#39;</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">peek</span>() {
-            <span class="self">self</span>.<span class="ident">advance</span>();
+    <span class="kw">fn </span>number(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; Token {
+        <span class="kw">while let </span><span class="prelude-val">Some</span>(<span class="string">&#39;0&#39;</span>..=<span class="string">&#39;9&#39;</span>) = <span class="self">self</span>.peek() {
+            <span class="self">self</span>.advance();
         }
 
-        <span class="kw">let</span> <span class="ident">has_fraction</span> <span class="op">=</span> <span class="macro">matches!</span>(<span class="self">self</span>.<span class="ident">peek</span>(), <span class="prelude-val">Some</span>(<span class="string">&#39;.&#39;</span>));
-        <span class="kw">let</span> <span class="ident">next_digit</span> <span class="op">=</span> <span class="macro">matches!</span>(<span class="self">self</span>.<span class="ident">peek_next</span>(), <span class="prelude-val">Some</span>(<span class="string">&#39;0&#39;</span>..<span class="op">=</span><span class="string">&#39;9&#39;</span>));
+        <span class="kw">let </span>has_fraction = <span class="macro">matches!</span>(<span class="self">self</span>.peek(), <span class="prelude-val">Some</span>(<span class="string">&#39;.&#39;</span>));
+        <span class="kw">let </span>next_digit = <span class="macro">matches!</span>(<span class="self">self</span>.peek_next(), <span class="prelude-val">Some</span>(<span class="string">&#39;0&#39;</span>..=<span class="string">&#39;9&#39;</span>));
 
-        <span class="kw">if</span> <span class="ident">has_fraction</span> <span class="op">&amp;&amp;</span> <span class="ident">next_digit</span> {
-            <span class="self">self</span>.<span class="ident">advance</span>();
+        <span class="kw">if </span>has_fraction &amp;&amp; next_digit {
+            <span class="self">self</span>.advance();
 
-            <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="string">&#39;0&#39;</span>..<span class="op">=</span><span class="string">&#39;9&#39;</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">peek</span>() {
-                <span class="self">self</span>.<span class="ident">advance</span>();
+            <span class="kw">while let </span><span class="prelude-val">Some</span>(<span class="string">&#39;0&#39;</span>..=<span class="string">&#39;9&#39;</span>) = <span class="self">self</span>.peek() {
+                <span class="self">self</span>.advance();
             }
         }
 
-        <span class="self">self</span>.<span class="ident">make_token</span>(<span class="ident">TokenType::Number</span>)
+        <span class="self">self</span>.make_token(TokenType::Number)
     }
 
-    <span class="kw">fn</span> <span class="ident">identifier</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">Token</span> {
-        <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="string">&#39;a&#39;</span>..<span class="op">=</span><span class="string">&#39;z&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;A&#39;</span>..<span class="op">=</span><span class="string">&#39;Z&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;_&#39;</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">peek</span>() {
-            <span class="self">self</span>.<span class="ident">advance</span>();
+    <span class="kw">fn </span>identifier(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; Token {
+        <span class="kw">while let </span><span class="prelude-val">Some</span>(<span class="string">&#39;a&#39;</span>..=<span class="string">&#39;z&#39;</span>) | <span class="prelude-val">Some</span>(<span class="string">&#39;A&#39;</span>..=<span class="string">&#39;Z&#39;</span>) | <span class="prelude-val">Some</span>(<span class="string">&#39;_&#39;</span>) = <span class="self">self</span>.peek() {
+            <span class="self">self</span>.advance();
         }
 
-        <span class="self">self</span>.<span class="ident">make_token</span>(<span class="self">self</span>.<span class="ident">identifier_type</span>())
+        <span class="self">self</span>.make_token(<span class="self">self</span>.identifier_type())
     }
 
-    <span class="kw">fn</span> <span class="ident">identifier_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">TokenType</span> {
-        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">source</span>.<span class="ident">chars</span>().<span class="ident">nth</span>(<span class="self">self</span>.<span class="ident">start</span>) {
-            <span class="prelude-val">Some</span>(<span class="string">&#39;a&#39;</span>) =&gt; <span class="self">self</span>.<span class="ident">check_keyword</span>(<span class="number">1</span>, <span class="string">&quot;nd&quot;</span>, <span class="ident">TokenType::And</span>),
-            <span class="prelude-val">Some</span>(<span class="string">&#39;c&#39;</span>) =&gt; <span class="self">self</span>.<span class="ident">check_keyword</span>(<span class="number">1</span>, <span class="string">&quot;lass&quot;</span>, <span class="ident">TokenType::Class</span>),
-            <span class="prelude-val">Some</span>(<span class="string">&#39;e&#39;</span>) =&gt; <span class="self">self</span>.<span class="ident">check_keyword</span>(<span class="number">1</span>, <span class="string">&quot;lse&quot;</span>, <span class="ident">TokenType::Else</span>),
-            <span class="prelude-val">Some</span>(<span class="string">&#39;i&#39;</span>) =&gt; <span class="self">self</span>.<span class="ident">check_keyword</span>(<span class="number">1</span>, <span class="string">&quot;f&quot;</span>, <span class="ident">TokenType::If</span>),
-            <span class="prelude-val">Some</span>(<span class="string">&#39;n&#39;</span>) =&gt; <span class="self">self</span>.<span class="ident">check_keyword</span>(<span class="number">1</span>, <span class="string">&quot;il&quot;</span>, <span class="ident">TokenType::Nil</span>),
-            <span class="prelude-val">Some</span>(<span class="string">&#39;o&#39;</span>) =&gt; <span class="self">self</span>.<span class="ident">check_keyword</span>(<span class="number">1</span>, <span class="string">&quot;r&quot;</span>, <span class="ident">TokenType::Or</span>),
-            <span class="prelude-val">Some</span>(<span class="string">&#39;p&#39;</span>) =&gt; <span class="self">self</span>.<span class="ident">check_keyword</span>(<span class="number">1</span>, <span class="string">&quot;rint&quot;</span>, <span class="ident">TokenType::Print</span>),
-            <span class="prelude-val">Some</span>(<span class="string">&#39;r&#39;</span>) =&gt; <span class="self">self</span>.<span class="ident">check_keyword</span>(<span class="number">1</span>, <span class="string">&quot;eturn&quot;</span>, <span class="ident">TokenType::Return</span>),
-            <span class="prelude-val">Some</span>(<span class="string">&#39;s&#39;</span>) =&gt; <span class="self">self</span>.<span class="ident">check_keyword</span>(<span class="number">1</span>, <span class="string">&quot;uper&quot;</span>, <span class="ident">TokenType::Super</span>),
-            <span class="prelude-val">Some</span>(<span class="string">&#39;v&#39;</span>) =&gt; <span class="self">self</span>.<span class="ident">check_keyword</span>(<span class="number">1</span>, <span class="string">&quot;ar&quot;</span>, <span class="ident">TokenType::Var</span>),
-            <span class="prelude-val">Some</span>(<span class="string">&#39;w&#39;</span>) =&gt; <span class="self">self</span>.<span class="ident">check_keyword</span>(<span class="number">1</span>, <span class="string">&quot;hile&quot;</span>, <span class="ident">TokenType::While</span>),
-            <span class="prelude-val">Some</span>(<span class="string">&#39;f&#39;</span>) =&gt; <span class="kw">match</span> <span class="self">self</span>.<span class="ident">source</span>.<span class="ident">chars</span>().<span class="ident">nth</span>(<span class="self">self</span>.<span class="ident">start</span> <span class="op">+</span> <span class="number">1</span>) {
-                <span class="prelude-val">Some</span>(<span class="string">&#39;a&#39;</span>) =&gt; <span class="self">self</span>.<span class="ident">check_keyword</span>(<span class="number">2</span>, <span class="string">&quot;lse&quot;</span>, <span class="ident">TokenType::False</span>),
-                <span class="prelude-val">Some</span>(<span class="string">&#39;o&#39;</span>) =&gt; <span class="self">self</span>.<span class="ident">check_keyword</span>(<span class="number">2</span>, <span class="string">&quot;r&quot;</span>, <span class="ident">TokenType::For</span>),
-                <span class="prelude-val">Some</span>(<span class="string">&#39;u&#39;</span>) =&gt; <span class="self">self</span>.<span class="ident">check_keyword</span>(<span class="number">2</span>, <span class="string">&quot;n&quot;</span>, <span class="ident">TokenType::Fun</span>),
-                <span class="kw">_</span> =&gt; <span class="ident">TokenType::Identifier</span>,
+    <span class="kw">fn </span>identifier_type(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; TokenType {
+        <span class="kw">match </span><span class="self">self</span>.source.chars().nth(<span class="self">self</span>.start) {
+            <span class="prelude-val">Some</span>(<span class="string">&#39;a&#39;</span>) =&gt; <span class="self">self</span>.check_keyword(<span class="number">1</span>, <span class="string">&quot;nd&quot;</span>, TokenType::And),
+            <span class="prelude-val">Some</span>(<span class="string">&#39;c&#39;</span>) =&gt; <span class="self">self</span>.check_keyword(<span class="number">1</span>, <span class="string">&quot;lass&quot;</span>, TokenType::Class),
+            <span class="prelude-val">Some</span>(<span class="string">&#39;e&#39;</span>) =&gt; <span class="self">self</span>.check_keyword(<span class="number">1</span>, <span class="string">&quot;lse&quot;</span>, TokenType::Else),
+            <span class="prelude-val">Some</span>(<span class="string">&#39;i&#39;</span>) =&gt; <span class="self">self</span>.check_keyword(<span class="number">1</span>, <span class="string">&quot;f&quot;</span>, TokenType::If),
+            <span class="prelude-val">Some</span>(<span class="string">&#39;n&#39;</span>) =&gt; <span class="self">self</span>.check_keyword(<span class="number">1</span>, <span class="string">&quot;il&quot;</span>, TokenType::Nil),
+            <span class="prelude-val">Some</span>(<span class="string">&#39;o&#39;</span>) =&gt; <span class="self">self</span>.check_keyword(<span class="number">1</span>, <span class="string">&quot;r&quot;</span>, TokenType::Or),
+            <span class="prelude-val">Some</span>(<span class="string">&#39;p&#39;</span>) =&gt; <span class="self">self</span>.check_keyword(<span class="number">1</span>, <span class="string">&quot;rint&quot;</span>, TokenType::Print),
+            <span class="prelude-val">Some</span>(<span class="string">&#39;r&#39;</span>) =&gt; <span class="self">self</span>.check_keyword(<span class="number">1</span>, <span class="string">&quot;eturn&quot;</span>, TokenType::Return),
+            <span class="prelude-val">Some</span>(<span class="string">&#39;s&#39;</span>) =&gt; <span class="self">self</span>.check_keyword(<span class="number">1</span>, <span class="string">&quot;uper&quot;</span>, TokenType::Super),
+            <span class="prelude-val">Some</span>(<span class="string">&#39;v&#39;</span>) =&gt; <span class="self">self</span>.check_keyword(<span class="number">1</span>, <span class="string">&quot;ar&quot;</span>, TokenType::Var),
+            <span class="prelude-val">Some</span>(<span class="string">&#39;w&#39;</span>) =&gt; <span class="self">self</span>.check_keyword(<span class="number">1</span>, <span class="string">&quot;hile&quot;</span>, TokenType::While),
+            <span class="prelude-val">Some</span>(<span class="string">&#39;f&#39;</span>) =&gt; <span class="kw">match </span><span class="self">self</span>.source.chars().nth(<span class="self">self</span>.start + <span class="number">1</span>) {
+                <span class="prelude-val">Some</span>(<span class="string">&#39;a&#39;</span>) =&gt; <span class="self">self</span>.check_keyword(<span class="number">2</span>, <span class="string">&quot;lse&quot;</span>, TokenType::False),
+                <span class="prelude-val">Some</span>(<span class="string">&#39;o&#39;</span>) =&gt; <span class="self">self</span>.check_keyword(<span class="number">2</span>, <span class="string">&quot;r&quot;</span>, TokenType::For),
+                <span class="prelude-val">Some</span>(<span class="string">&#39;u&#39;</span>) =&gt; <span class="self">self</span>.check_keyword(<span class="number">2</span>, <span class="string">&quot;n&quot;</span>, TokenType::Fun),
+                <span class="kw">_ </span>=&gt; TokenType::Identifier,
             },
-            <span class="prelude-val">Some</span>(<span class="string">&#39;t&#39;</span>) =&gt; <span class="kw">match</span> <span class="self">self</span>.<span class="ident">source</span>.<span class="ident">chars</span>().<span class="ident">nth</span>(<span class="self">self</span>.<span class="ident">start</span> <span class="op">+</span> <span class="number">1</span>) {
-                <span class="prelude-val">Some</span>(<span class="string">&#39;h&#39;</span>) =&gt; <span class="self">self</span>.<span class="ident">check_keyword</span>(<span class="number">2</span>, <span class="string">&quot;is&quot;</span>, <span class="ident">TokenType::This</span>),
-                <span class="prelude-val">Some</span>(<span class="string">&#39;r&#39;</span>) =&gt; <span class="self">self</span>.<span class="ident">check_keyword</span>(<span class="number">2</span>, <span class="string">&quot;ue&quot;</span>, <span class="ident">TokenType::True</span>),
-                <span class="kw">_</span> =&gt; <span class="ident">TokenType::Identifier</span>,
+            <span class="prelude-val">Some</span>(<span class="string">&#39;t&#39;</span>) =&gt; <span class="kw">match </span><span class="self">self</span>.source.chars().nth(<span class="self">self</span>.start + <span class="number">1</span>) {
+                <span class="prelude-val">Some</span>(<span class="string">&#39;h&#39;</span>) =&gt; <span class="self">self</span>.check_keyword(<span class="number">2</span>, <span class="string">&quot;is&quot;</span>, TokenType::This),
+                <span class="prelude-val">Some</span>(<span class="string">&#39;r&#39;</span>) =&gt; <span class="self">self</span>.check_keyword(<span class="number">2</span>, <span class="string">&quot;ue&quot;</span>, TokenType::True),
+                <span class="kw">_ </span>=&gt; TokenType::Identifier,
             },
-            <span class="kw">_</span> =&gt; <span class="ident">TokenType::Identifier</span>,
+            <span class="kw">_ </span>=&gt; TokenType::Identifier,
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">check_keyword</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">start</span>: <span class="ident">usize</span>, <span class="ident">rest</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">token_type</span>: <span class="ident">TokenType</span>) -&gt; <span class="ident">TokenType</span> {
-        <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> <span class="ident">rest</span>.<span class="ident">len</span>();
-        <span class="kw">let</span> <span class="ident">slice</span> <span class="op">=</span> <span class="self">self</span>
-            .<span class="ident">source</span>
-            .<span class="ident">get</span>(<span class="self">self</span>.<span class="ident">start</span> <span class="op">+</span> <span class="ident">start</span>..<span class="self">self</span>.<span class="ident">start</span> <span class="op">+</span> <span class="ident">start</span> <span class="op">+</span> <span class="ident">len</span>);
+    <span class="kw">fn </span>check_keyword(<span class="kw-2">&amp;</span><span class="self">self</span>, start: usize, rest: <span class="kw-2">&amp;</span>str, token_type: TokenType) -&gt; TokenType {
+        <span class="kw">let </span>len = rest.len();
+        <span class="kw">let </span>slice = <span class="self">self
+            </span>.source
+            .get(<span class="self">self</span>.start + start..<span class="self">self</span>.start + start + len);
 
-        <span class="kw">match</span> <span class="ident">slice</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">s</span>) <span class="kw">if</span> <span class="ident">s</span> <span class="op">==</span> <span class="ident">rest</span> =&gt; <span class="ident">token_type</span>,
-            <span class="kw">_</span> =&gt; <span class="ident">TokenType::Identifier</span>,
+        <span class="kw">match </span>slice {
+            <span class="prelude-val">Some</span>(s) <span class="kw">if </span>s == rest =&gt; token_type,
+            <span class="kw">_ </span>=&gt; TokenType::Identifier,
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">error_token</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">message</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>) -&gt; <span class="ident">Token</span> {
-        <span class="ident">Token</span> {
-            <span class="ident">token_type</span>: <span class="ident">TokenType::Error</span>,
-            <span class="ident">lexeme</span>: <span class="ident">message</span>,
-            <span class="ident">line</span>: <span class="self">self</span>.<span class="ident">line</span>,
+    <span class="kw">fn </span>error_token(<span class="kw-2">&amp;</span><span class="self">self</span>, message: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str) -&gt; Token {
+        Token {
+            token_type: TokenType::Error,
+            lexeme: message,
+            line: <span class="self">self</span>.line,
         }
     }
 }
 
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Token</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span> <span class="ident">token_type</span>: <span class="ident">TokenType</span>,
-    <span class="kw">pub</span> <span class="ident">lexeme</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>,
-    <span class="kw">pub</span> <span class="ident">line</span>: <span class="ident">i32</span>,
+<span class="kw">pub struct </span>Token&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="kw">pub </span>token_type: TokenType,
+    <span class="kw">pub </span>lexeme: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str,
+    <span class="kw">pub </span>line: i32,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">TokenType</span> {
-    <span class="ident">LeftParen</span>,
-    <span class="ident">RightParen</span>,
-    <span class="ident">LeftBrace</span>,
-    <span class="ident">RightBrace</span>,
-    <span class="ident">Comma</span>,
-    <span class="ident">Dot</span>,
-    <span class="ident">Minus</span>,
-    <span class="ident">Plus</span>,
-    <span class="ident">Semicolon</span>,
-    <span class="ident">Slash</span>,
-    <span class="ident">Star</span>,
-    <span class="ident">Bang</span>,
-    <span class="ident">BangEqual</span>,
-    <span class="ident">Equal</span>,
-    <span class="ident">EqualEqual</span>,
-    <span class="ident">Greater</span>,
-    <span class="ident">GreaterEqual</span>,
-    <span class="ident">Less</span>,
-    <span class="ident">LessEqual</span>,
-    <span class="ident">Identifier</span>,
-    <span class="ident">String</span>,
-    <span class="ident">Number</span>,
-    <span class="ident">And</span>,
-    <span class="ident">Class</span>,
-    <span class="ident">Else</span>,
-    <span class="ident">False</span>,
-    <span class="ident">For</span>,
-    <span class="ident">Fun</span>,
-    <span class="ident">If</span>,
-    <span class="ident">Nil</span>,
-    <span class="ident">Or</span>,
-    <span class="ident">Print</span>,
-    <span class="ident">Return</span>,
-    <span class="ident">Super</span>,
-    <span class="ident">This</span>,
-    <span class="ident">True</span>,
-    <span class="ident">Var</span>,
-    <span class="ident">While</span>,
-    <span class="ident">Error</span>,
-    <span class="ident">EOF</span>,
+<span class="attribute">#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+</span><span class="kw">pub enum </span>TokenType {
+    LeftParen,
+    RightParen,
+    LeftBrace,
+    RightBrace,
+    Comma,
+    Dot,
+    Minus,
+    Plus,
+    Semicolon,
+    Slash,
+    Star,
+    Bang,
+    BangEqual,
+    Equal,
+    EqualEqual,
+    Greater,
+    GreaterEqual,
+    Less,
+    LessEqual,
+    Identifier,
+    String,
+    Number,
+    And,
+    Class,
+    Else,
+    False,
+    For,
+    Fun,
+    If,
+    Nil,
+    Or,
+    Print,
+    Return,
+    Super,
+    This,
+    True,
+    Var,
+    While,
+    Error,
+    EOF,
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rulox" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rulox" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

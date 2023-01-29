@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lib/src/compiler.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>compiler.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../rulox/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../rulox/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../rulox/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lib/src/compiler.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>compiler.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../rulox/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -194,201 +194,201 @@
 <span id="194">194</span>
 <span id="195">195</span>
 <span id="196">196</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">num_enum</span>::{<span class="ident">IntoPrimitive</span>, <span class="ident">TryFromPrimitive</span>};
-<span class="kw">use</span> <span class="ident">thiserror::Error</span>;
+</pre><pre class="rust"><code><span class="kw">use </span>num_enum::{IntoPrimitive, TryFromPrimitive};
+<span class="kw">use </span>thiserror::Error;
 
-<span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">scanner</span>::{<span class="ident">Scanner</span>, <span class="ident">TokenType</span>},
-    <span class="ident">value::Value</span>,
+<span class="kw">use crate</span>::{
+    scanner::{Scanner, TokenType},
+    value::Value,
 };
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">compile</span>(<span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">scanner</span> <span class="op">=</span> <span class="ident">Scanner::new</span>(<span class="ident">source</span>);
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">line</span> <span class="op">=</span> <span class="op">-</span><span class="number">1</span>;
+<span class="kw">pub fn </span>compile(source: <span class="kw-2">&amp;</span>str) {
+    <span class="kw">let </span><span class="kw-2">mut </span>scanner = Scanner::new(source);
+    <span class="kw">let </span><span class="kw-2">mut </span>line = -<span class="number">1</span>;
 
-    <span class="kw">loop</span> {
-        <span class="kw">let</span> <span class="ident">token</span> <span class="op">=</span> <span class="ident">scanner</span>.<span class="ident">scan_token</span>();
+    <span class="kw">loop </span>{
+        <span class="kw">let </span>token = scanner.scan_token();
 
-        <span class="kw">if</span> <span class="ident">token</span>.<span class="ident">line</span> <span class="op">!</span><span class="op">=</span> <span class="ident">line</span> {
-            <span class="macro">print!</span>(<span class="string">&quot;{:4} &quot;</span>, <span class="ident">token</span>.<span class="ident">line</span>);
-            <span class="ident">line</span> <span class="op">=</span> <span class="ident">token</span>.<span class="ident">line</span>;
-        } <span class="kw">else</span> {
+        <span class="kw">if </span>token.line != line {
+            <span class="macro">print!</span>(<span class="string">&quot;{:4} &quot;</span>, token.line);
+            line = token.line;
+        } <span class="kw">else </span>{
             <span class="macro">print!</span>(<span class="string">&quot;   | &quot;</span>);
         }
 
-        <span class="macro">println!</span>(<span class="string">&quot;{:?} &#39;{}&#39;&quot;</span>, <span class="ident">token</span>.<span class="ident">token_type</span>, <span class="ident">token</span>.<span class="ident">lexeme</span>);
+        <span class="macro">println!</span>(<span class="string">&quot;{:?} &#39;{}&#39;&quot;</span>, token.token_type, token.lexeme);
 
-        <span class="kw">if</span> <span class="ident">token</span>.<span class="ident">token_type</span> <span class="op">==</span> <span class="ident">TokenType::EOF</span> {
+        <span class="kw">if </span>token.token_type == TokenType::EOF {
             <span class="kw">break</span>;
         }
     }
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Chunk</span> {
-    <span class="ident">code</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
+<span class="attribute">#[derive(Default)]
+</span><span class="kw">pub struct </span>Chunk {
+    code: Vec&lt;u8&gt;,
 
-    <span class="ident">lines</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
+    lines: Vec&lt;usize&gt;,
 
-    <span class="kw">pub</span> <span class="ident">constants</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
+    <span class="kw">pub </span>constants: Vec&lt;Value&gt;,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">IntoPrimitive</span>, <span class="ident">TryFromPrimitive</span>)]</span>
-<span class="attribute">#[<span class="ident">repr</span>(<span class="ident">u8</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">OpCode</span> {
-    <span class="ident">Constant</span>,
+<span class="attribute">#[derive(Clone, Copy, Debug, Eq, PartialEq, IntoPrimitive, TryFromPrimitive)]
+#[repr(u8)]
+</span><span class="kw">pub enum </span>OpCode {
+    Constant,
 
-    <span class="ident">ConstantLong</span>,
+    ConstantLong,
 
-    <span class="ident">Add</span>,
+    Add,
 
-    <span class="ident">Subtract</span>,
+    Subtract,
 
-    <span class="ident">Multiply</span>,
+    Multiply,
 
-    <span class="ident">Divide</span>,
+    Divide,
 
-    <span class="ident">Negate</span>,
+    Negate,
 
-    <span class="ident">Return</span>,
+    Return,
 }
 
-<span class="doccomment">/// Errors that can occur during compilation.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Error</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">CompileError</span> {
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Too many constants&quot;</span>)]</span>
-    <span class="ident">TooManyConstants</span>,
+<span class="doccomment">/// Errors that can occur during compilation.
+</span><span class="attribute">#[derive(Error, Clone, Debug)]
+</span><span class="kw">pub enum </span>CompileError {
+    <span class="attribute">#[error(<span class="string">&quot;Too many constants&quot;</span>)]
+    </span>TooManyConstants,
 }
 
-<span class="doccomment">/// The maximum number of constants that can be stored in a chunk.</span>
-<span class="kw">const</span> <span class="ident">MAX_CONSTANTS</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">0xFFFFFF</span>; <span class="comment">// 24 bits</span>
+<span class="doccomment">/// The maximum number of constants that can be stored in a chunk.
+</span><span class="kw">const </span>MAX_CONSTANTS: usize = <span class="number">0xFFFFFF</span>; <span class="comment">// 24 bits
 
-<span class="kw">impl</span> <span class="ident">Chunk</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">code</span>: <span class="ident">Vec::new</span>(),
-            <span class="ident">lines</span>: <span class="ident">Vec::new</span>(),
-            <span class="ident">constants</span>: <span class="ident">Vec::new</span>(),
+</span><span class="kw">impl </span>Chunk {
+    <span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            code: Vec::new(),
+            lines: Vec::new(),
+            constants: Vec::new(),
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">idx</span>: <span class="ident">usize</span>) -&gt; <span class="ident">u8</span> {
-        <span class="self">self</span>.<span class="ident">code</span>[<span class="ident">idx</span>]
+    <span class="kw">pub fn </span>read(<span class="kw-2">&amp;</span><span class="self">self</span>, idx: usize) -&gt; u8 {
+        <span class="self">self</span>.code[idx]
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">write</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">data</span>: <span class="ident">T</span>, <span class="ident">line</span>: <span class="ident">usize</span>)
-    <span class="kw">where</span>
-        <span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
+    <span class="kw">pub fn </span>write&lt;T&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, data: T, line: usize)
+    <span class="kw">where
+        </span>T: Into&lt;u8&gt;,
     {
-        <span class="self">self</span>.<span class="ident">code</span>.<span class="ident">push</span>(<span class="ident">data</span>.<span class="ident">into</span>());
-        <span class="self">self</span>.<span class="ident">lines</span>.<span class="ident">push</span>(<span class="ident">line</span>);
+        <span class="self">self</span>.code.push(data.into());
+        <span class="self">self</span>.lines.push(line);
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">write_constant</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">T</span>, <span class="ident">line</span>: <span class="ident">usize</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">CompileError</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
+    <span class="kw">pub fn </span>write_constant&lt;T&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, value: T, line: usize) -&gt; <span class="prelude-ty">Result</span>&lt;(), CompileError&gt;
+    <span class="kw">where
+        </span>T: Into&lt;Value&gt;,
     {
-        <span class="kw">let</span> <span class="ident">index</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">add_constant</span>(<span class="ident">value</span>.<span class="ident">into</span>())<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">opcode</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">index</span> <span class="op">&gt;</span> <span class="ident">u8::MAX</span> <span class="kw">as</span> <span class="ident">usize</span> {
-            <span class="ident">OpCode::ConstantLong</span>
-        } <span class="kw">else</span> {
-            <span class="ident">OpCode::Constant</span>
+        <span class="kw">let </span>index = <span class="self">self</span>.add_constant(value.into())<span class="question-mark">?</span>;
+        <span class="kw">let </span>opcode = <span class="kw">if </span>index &gt; u8::MAX <span class="kw">as </span>usize {
+            OpCode::ConstantLong
+        } <span class="kw">else </span>{
+            OpCode::Constant
         };
 
-        <span class="self">self</span>.<span class="ident">write</span>(<span class="ident">opcode</span>, <span class="ident">line</span>);
+        <span class="self">self</span>.write(opcode, line);
 
-        <span class="kw">if</span> <span class="ident">opcode</span> <span class="op">==</span> <span class="ident">OpCode::Constant</span> {
-            <span class="self">self</span>.<span class="ident">write</span>(<span class="ident">index</span> <span class="kw">as</span> <span class="ident">u8</span>, <span class="ident">line</span>);
-        } <span class="kw">else</span> {
-            <span class="kw">let</span> <span class="ident">low</span> <span class="op">=</span> (<span class="ident">index</span> <span class="op">&amp;</span> <span class="number">0xFF</span>) <span class="kw">as</span> <span class="ident">u8</span>;
-            <span class="kw">let</span> <span class="ident">mid</span> <span class="op">=</span> ((<span class="ident">index</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">8</span>) <span class="op">&amp;</span> <span class="number">0xFF</span>) <span class="kw">as</span> <span class="ident">u8</span>;
-            <span class="kw">let</span> <span class="ident">high</span> <span class="op">=</span> ((<span class="ident">index</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">16</span>) <span class="op">&amp;</span> <span class="number">0xFF</span>) <span class="kw">as</span> <span class="ident">u8</span>;
-            <span class="self">self</span>.<span class="ident">write</span>(<span class="ident">high</span>, <span class="ident">line</span>);
-            <span class="self">self</span>.<span class="ident">write</span>(<span class="ident">mid</span>, <span class="ident">line</span>);
-            <span class="self">self</span>.<span class="ident">write</span>(<span class="ident">low</span>, <span class="ident">line</span>);
+        <span class="kw">if </span>opcode == OpCode::Constant {
+            <span class="self">self</span>.write(index <span class="kw">as </span>u8, line);
+        } <span class="kw">else </span>{
+            <span class="kw">let </span>low = (index &amp; <span class="number">0xFF</span>) <span class="kw">as </span>u8;
+            <span class="kw">let </span>mid = ((index &gt;&gt; <span class="number">8</span>) &amp; <span class="number">0xFF</span>) <span class="kw">as </span>u8;
+            <span class="kw">let </span>high = ((index &gt;&gt; <span class="number">16</span>) &amp; <span class="number">0xFF</span>) <span class="kw">as </span>u8;
+            <span class="self">self</span>.write(high, line);
+            <span class="self">self</span>.write(mid, line);
+            <span class="self">self</span>.write(low, line);
         }
 
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">add_constant</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">Value</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span>, <span class="ident">CompileError</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">constants</span>.<span class="ident">len</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="ident">MAX_CONSTANTS</span> {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">CompileError::TooManyConstants</span>);
+    <span class="kw">fn </span>add_constant(<span class="kw-2">&amp;mut </span><span class="self">self</span>, value: Value) -&gt; <span class="prelude-ty">Result</span>&lt;usize, CompileError&gt; {
+        <span class="kw">if </span><span class="self">self</span>.constants.len() &gt;= MAX_CONSTANTS {
+            <span class="kw">return </span><span class="prelude-val">Err</span>(CompileError::TooManyConstants);
         }
 
-        <span class="self">self</span>.<span class="ident">constants</span>.<span class="ident">push</span>(<span class="ident">value</span>);
-        <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">constants</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="number">1</span>)
+        <span class="self">self</span>.constants.push(value);
+        <span class="prelude-val">Ok</span>(<span class="self">self</span>.constants.len() - <span class="number">1</span>)
     }
 
-    <span class="doccomment">/// Disassembles the chunk, printing the given header to identify it.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">disassemble</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) {
-        <span class="macro">eprintln!</span>(<span class="string">&quot;== {} ==&quot;</span>, <span class="ident">name</span>);
+    <span class="doccomment">/// Disassembles the chunk, printing the given header to identify it.
+    </span><span class="kw">pub fn </span>disassemble(<span class="kw-2">&amp;</span><span class="self">self</span>, name: <span class="kw-2">&amp;</span>str) {
+        <span class="macro">eprintln!</span>(<span class="string">&quot;== {} ==&quot;</span>, name);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">offset</span> <span class="op">=</span> <span class="number">0</span>;
-        <span class="kw">while</span> <span class="ident">offset</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">code</span>.<span class="ident">len</span>() {
-            <span class="ident">offset</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">disassemble_instruction</span>(<span class="ident">offset</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>offset = <span class="number">0</span>;
+        <span class="kw">while </span>offset &lt; <span class="self">self</span>.code.len() {
+            offset = <span class="self">self</span>.disassemble_instruction(offset);
         }
     }
 
-    <span class="doccomment">/// Disassemble the instruction at the given offset.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">disassemble_instruction</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">offset</span>: <span class="ident">usize</span>) -&gt; <span class="ident">usize</span> {
-        <span class="macro">eprint!</span>(<span class="string">&quot;{:04} &quot;</span>, <span class="ident">offset</span>);
-        <span class="kw">let</span> <span class="ident">line</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">lines</span>[<span class="ident">offset</span>];
+    <span class="doccomment">/// Disassemble the instruction at the given offset.
+    </span><span class="kw">pub fn </span>disassemble_instruction(<span class="kw-2">&amp;</span><span class="self">self</span>, offset: usize) -&gt; usize {
+        <span class="macro">eprint!</span>(<span class="string">&quot;{:04} &quot;</span>, offset);
+        <span class="kw">let </span>line = <span class="self">self</span>.lines[offset];
 
-        <span class="kw">if</span> <span class="ident">offset</span> <span class="op">&gt;</span> <span class="number">0</span> <span class="op">&amp;&amp;</span> <span class="ident">line</span> <span class="op">==</span> <span class="self">self</span>.<span class="ident">lines</span>[<span class="ident">offset</span> <span class="op">-</span> <span class="number">1</span>] {
+        <span class="kw">if </span>offset &gt; <span class="number">0 </span>&amp;&amp; line == <span class="self">self</span>.lines[offset - <span class="number">1</span>] {
             <span class="macro">eprint!</span>(<span class="string">&quot;   | &quot;</span>);
-        } <span class="kw">else</span> {
-            <span class="macro">eprint!</span>(<span class="string">&quot;{:4} &quot;</span>, <span class="ident">line</span>);
+        } <span class="kw">else </span>{
+            <span class="macro">eprint!</span>(<span class="string">&quot;{:4} &quot;</span>, line);
         }
 
-        <span class="kw">let</span> <span class="ident">instruction</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">code</span>[<span class="ident">offset</span>];
-        <span class="kw">let</span> <span class="ident">opcode</span> <span class="op">=</span> <span class="ident">OpCode::try_from</span>(<span class="ident">instruction</span>);
-        <span class="kw">match</span> <span class="ident">opcode</span> {
-            <span class="prelude-val">Ok</span>(<span class="ident">OpCode::Constant</span>) =&gt; <span class="ident">constant_instruction</span>(<span class="string">&quot;OP_CONSTANT&quot;</span>, <span class="self">self</span>, <span class="ident">offset</span>),
-            <span class="prelude-val">Ok</span>(<span class="ident">OpCode::ConstantLong</span>) =&gt; <span class="ident">constant_long_instruction</span>(<span class="string">&quot;OP_CONSTANT_LONG&quot;</span>, <span class="self">self</span>, <span class="ident">offset</span>),
+        <span class="kw">let </span>instruction = <span class="self">self</span>.code[offset];
+        <span class="kw">let </span>opcode = OpCode::try_from(instruction);
+        <span class="kw">match </span>opcode {
+            <span class="prelude-val">Ok</span>(OpCode::Constant) =&gt; constant_instruction(<span class="string">&quot;OP_CONSTANT&quot;</span>, <span class="self">self</span>, offset),
+            <span class="prelude-val">Ok</span>(OpCode::ConstantLong) =&gt; constant_long_instruction(<span class="string">&quot;OP_CONSTANT_LONG&quot;</span>, <span class="self">self</span>, offset),
 
-            <span class="prelude-val">Ok</span>(<span class="ident">OpCode::Add</span>) =&gt; <span class="ident">simple_instruction</span>(<span class="string">&quot;OP_ADD&quot;</span>, <span class="ident">offset</span>),
-            <span class="prelude-val">Ok</span>(<span class="ident">OpCode::Subtract</span>) =&gt; <span class="ident">simple_instruction</span>(<span class="string">&quot;OP_SUBTRACT&quot;</span>, <span class="ident">offset</span>),
-            <span class="prelude-val">Ok</span>(<span class="ident">OpCode::Multiply</span>) =&gt; <span class="ident">simple_instruction</span>(<span class="string">&quot;OP_MULTIPLY&quot;</span>, <span class="ident">offset</span>),
-            <span class="prelude-val">Ok</span>(<span class="ident">OpCode::Divide</span>) =&gt; <span class="ident">simple_instruction</span>(<span class="string">&quot;OP_DIVIDE&quot;</span>, <span class="ident">offset</span>),
-            <span class="prelude-val">Ok</span>(<span class="ident">OpCode::Negate</span>) =&gt; <span class="ident">simple_instruction</span>(<span class="string">&quot;OP_NEGATE&quot;</span>, <span class="ident">offset</span>),
+            <span class="prelude-val">Ok</span>(OpCode::Add) =&gt; simple_instruction(<span class="string">&quot;OP_ADD&quot;</span>, offset),
+            <span class="prelude-val">Ok</span>(OpCode::Subtract) =&gt; simple_instruction(<span class="string">&quot;OP_SUBTRACT&quot;</span>, offset),
+            <span class="prelude-val">Ok</span>(OpCode::Multiply) =&gt; simple_instruction(<span class="string">&quot;OP_MULTIPLY&quot;</span>, offset),
+            <span class="prelude-val">Ok</span>(OpCode::Divide) =&gt; simple_instruction(<span class="string">&quot;OP_DIVIDE&quot;</span>, offset),
+            <span class="prelude-val">Ok</span>(OpCode::Negate) =&gt; simple_instruction(<span class="string">&quot;OP_NEGATE&quot;</span>, offset),
 
-            <span class="prelude-val">Ok</span>(<span class="ident">OpCode::Return</span>) =&gt; <span class="ident">simple_instruction</span>(<span class="string">&quot;OP_RETURN&quot;</span>, <span class="ident">offset</span>),
+            <span class="prelude-val">Ok</span>(OpCode::Return) =&gt; simple_instruction(<span class="string">&quot;OP_RETURN&quot;</span>, offset),
 
             <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; {
-                <span class="macro">eprintln!</span>(<span class="string">&quot;Unknown opcode {}&quot;</span>, <span class="ident">instruction</span>);
-                <span class="ident">offset</span> <span class="op">+</span> <span class="number">1</span>
-            }
+                <span class="macro">eprintln!</span>(<span class="string">&quot;Unknown opcode {}&quot;</span>, instruction);
+                offset + <span class="number">1
+            </span>}
         }
     }
 }
 
-<span class="doccomment">/// Disassembles a simple single-byte instruction.</span>
-<span class="kw">fn</span> <span class="ident">simple_instruction</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">offset</span>: <span class="ident">usize</span>) -&gt; <span class="ident">usize</span> {
-    <span class="macro">eprintln!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">name</span>);
+<span class="doccomment">/// Disassembles a simple single-byte instruction.
+</span><span class="kw">fn </span>simple_instruction(name: <span class="kw-2">&amp;</span>str, offset: usize) -&gt; usize {
+    <span class="macro">eprintln!</span>(<span class="string">&quot;{}&quot;</span>, name);
 
-    <span class="ident">offset</span> <span class="op">+</span> <span class="number">1</span>
-}
+    offset + <span class="number">1
+</span>}
 
-<span class="doccomment">/// Disassembles a simple constant instruction.</span>
-<span class="kw">fn</span> <span class="ident">constant_instruction</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">chunk</span>: <span class="kw-2">&amp;</span><span class="ident">Chunk</span>, <span class="ident">offset</span>: <span class="ident">usize</span>) -&gt; <span class="ident">usize</span> {
-    <span class="kw">let</span> <span class="ident">constant</span> <span class="op">=</span> <span class="ident">chunk</span>.<span class="ident">code</span>[<span class="ident">offset</span> <span class="op">+</span> <span class="number">1</span>];
-    <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">chunk</span>.<span class="ident">constants</span>[<span class="ident">constant</span> <span class="kw">as</span> <span class="ident">usize</span>];
-    <span class="macro">eprintln!</span>(<span class="string">&quot;{:16} {:4} &#39;{}&#39;&quot;</span>, <span class="ident">name</span>, <span class="ident">constant</span>, <span class="ident">value</span>);
+<span class="doccomment">/// Disassembles a simple constant instruction.
+</span><span class="kw">fn </span>constant_instruction(name: <span class="kw-2">&amp;</span>str, chunk: <span class="kw-2">&amp;</span>Chunk, offset: usize) -&gt; usize {
+    <span class="kw">let </span>constant = chunk.code[offset + <span class="number">1</span>];
+    <span class="kw">let </span>value = chunk.constants[constant <span class="kw">as </span>usize];
+    <span class="macro">eprintln!</span>(<span class="string">&quot;{:16} {:4} &#39;{}&#39;&quot;</span>, name, constant, value);
 
-    <span class="ident">offset</span> <span class="op">+</span> <span class="number">2</span>
-}
+    offset + <span class="number">2
+</span>}
 
-<span class="doccomment">/// Disassembles a more complex &quot;long constant&quot; instruction.</span>
-<span class="kw">fn</span> <span class="ident">constant_long_instruction</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">chunk</span>: <span class="kw-2">&amp;</span><span class="ident">Chunk</span>, <span class="ident">offset</span>: <span class="ident">usize</span>) -&gt; <span class="ident">usize</span> {
-    <span class="kw">let</span> <span class="ident">high</span> <span class="op">=</span> <span class="ident">chunk</span>.<span class="ident">code</span>[<span class="ident">offset</span> <span class="op">+</span> <span class="number">1</span>] <span class="kw">as</span> <span class="ident">usize</span>;
-    <span class="kw">let</span> <span class="ident">mid</span> <span class="op">=</span> <span class="ident">chunk</span>.<span class="ident">code</span>[<span class="ident">offset</span> <span class="op">+</span> <span class="number">2</span>] <span class="kw">as</span> <span class="ident">usize</span>;
-    <span class="kw">let</span> <span class="ident">low</span> <span class="op">=</span> <span class="ident">chunk</span>.<span class="ident">code</span>[<span class="ident">offset</span> <span class="op">+</span> <span class="number">3</span>] <span class="kw">as</span> <span class="ident">usize</span>;
-    <span class="kw">let</span> <span class="ident">constant</span> <span class="op">=</span> <span class="ident">high</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">16</span> <span class="op">|</span> <span class="ident">mid</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">8</span> <span class="op">|</span> <span class="ident">low</span>;
-    <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">chunk</span>.<span class="ident">constants</span>[<span class="ident">constant</span>];
-    <span class="macro">eprintln!</span>(<span class="string">&quot;{:16} {:8} &#39;{}&#39;&quot;</span>, <span class="ident">name</span>, <span class="ident">constant</span>, <span class="ident">value</span>);
+<span class="doccomment">/// Disassembles a more complex &quot;long constant&quot; instruction.
+</span><span class="kw">fn </span>constant_long_instruction(name: <span class="kw-2">&amp;</span>str, chunk: <span class="kw-2">&amp;</span>Chunk, offset: usize) -&gt; usize {
+    <span class="kw">let </span>high = chunk.code[offset + <span class="number">1</span>] <span class="kw">as </span>usize;
+    <span class="kw">let </span>mid = chunk.code[offset + <span class="number">2</span>] <span class="kw">as </span>usize;
+    <span class="kw">let </span>low = chunk.code[offset + <span class="number">3</span>] <span class="kw">as </span>usize;
+    <span class="kw">let </span>constant = high &lt;&lt; <span class="number">16 </span>| mid &lt;&lt; <span class="number">8 </span>| low;
+    <span class="kw">let </span>value = chunk.constants[constant];
+    <span class="macro">eprintln!</span>(<span class="string">&quot;{:16} {:8} &#39;{}&#39;&quot;</span>, name, constant, value);
 
-    <span class="ident">offset</span> <span class="op">+</span> <span class="number">4</span>
-}
+    offset + <span class="number">4
+</span>}
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rulox" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rulox" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>
