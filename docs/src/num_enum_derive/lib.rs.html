@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/num_enum_derive-0.5.7/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../num_enum_derive/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/num_enum_derive-0.5.9/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../num_enum_derive/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -825,16 +825,172 @@
 <span id="825">825</span>
 <span id="826">826</span>
 <span id="827">827</span>
+<span id="828">828</span>
+<span id="829">829</span>
+<span id="830">830</span>
+<span id="831">831</span>
+<span id="832">832</span>
+<span id="833">833</span>
+<span id="834">834</span>
+<span id="835">835</span>
+<span id="836">836</span>
+<span id="837">837</span>
+<span id="838">838</span>
+<span id="839">839</span>
+<span id="840">840</span>
+<span id="841">841</span>
+<span id="842">842</span>
+<span id="843">843</span>
+<span id="844">844</span>
+<span id="845">845</span>
+<span id="846">846</span>
+<span id="847">847</span>
+<span id="848">848</span>
+<span id="849">849</span>
+<span id="850">850</span>
+<span id="851">851</span>
+<span id="852">852</span>
+<span id="853">853</span>
+<span id="854">854</span>
+<span id="855">855</span>
+<span id="856">856</span>
+<span id="857">857</span>
+<span id="858">858</span>
+<span id="859">859</span>
+<span id="860">860</span>
+<span id="861">861</span>
+<span id="862">862</span>
+<span id="863">863</span>
+<span id="864">864</span>
+<span id="865">865</span>
+<span id="866">866</span>
+<span id="867">867</span>
+<span id="868">868</span>
+<span id="869">869</span>
+<span id="870">870</span>
+<span id="871">871</span>
+<span id="872">872</span>
+<span id="873">873</span>
+<span id="874">874</span>
+<span id="875">875</span>
+<span id="876">876</span>
+<span id="877">877</span>
+<span id="878">878</span>
+<span id="879">879</span>
+<span id="880">880</span>
+<span id="881">881</span>
+<span id="882">882</span>
+<span id="883">883</span>
+<span id="884">884</span>
+<span id="885">885</span>
+<span id="886">886</span>
+<span id="887">887</span>
+<span id="888">888</span>
+<span id="889">889</span>
+<span id="890">890</span>
+<span id="891">891</span>
+<span id="892">892</span>
+<span id="893">893</span>
+<span id="894">894</span>
+<span id="895">895</span>
+<span id="896">896</span>
+<span id="897">897</span>
+<span id="898">898</span>
+<span id="899">899</span>
+<span id="900">900</span>
+<span id="901">901</span>
+<span id="902">902</span>
+<span id="903">903</span>
+<span id="904">904</span>
+<span id="905">905</span>
+<span id="906">906</span>
+<span id="907">907</span>
+<span id="908">908</span>
+<span id="909">909</span>
+<span id="910">910</span>
+<span id="911">911</span>
+<span id="912">912</span>
+<span id="913">913</span>
+<span id="914">914</span>
+<span id="915">915</span>
+<span id="916">916</span>
+<span id="917">917</span>
+<span id="918">918</span>
+<span id="919">919</span>
+<span id="920">920</span>
+<span id="921">921</span>
+<span id="922">922</span>
+<span id="923">923</span>
+<span id="924">924</span>
+<span id="925">925</span>
+<span id="926">926</span>
+<span id="927">927</span>
+<span id="928">928</span>
+<span id="929">929</span>
+<span id="930">930</span>
+<span id="931">931</span>
+<span id="932">932</span>
+<span id="933">933</span>
+<span id="934">934</span>
+<span id="935">935</span>
+<span id="936">936</span>
+<span id="937">937</span>
+<span id="938">938</span>
+<span id="939">939</span>
+<span id="940">940</span>
+<span id="941">941</span>
+<span id="942">942</span>
+<span id="943">943</span>
+<span id="944">944</span>
+<span id="945">945</span>
+<span id="946">946</span>
+<span id="947">947</span>
+<span id="948">948</span>
+<span id="949">949</span>
+<span id="950">950</span>
+<span id="951">951</span>
+<span id="952">952</span>
+<span id="953">953</span>
+<span id="954">954</span>
+<span id="955">955</span>
+<span id="956">956</span>
+<span id="957">957</span>
+<span id="958">958</span>
+<span id="959">959</span>
+<span id="960">960</span>
+<span id="961">961</span>
+<span id="962">962</span>
+<span id="963">963</span>
+<span id="964">964</span>
+<span id="965">965</span>
+<span id="966">966</span>
+<span id="967">967</span>
+<span id="968">968</span>
+<span id="969">969</span>
+<span id="970">970</span>
+<span id="971">971</span>
+<span id="972">972</span>
+<span id="973">973</span>
+<span id="974">974</span>
+<span id="975">975</span>
+<span id="976">976</span>
+<span id="977">977</span>
+<span id="978">978</span>
+<span id="979">979</span>
+<span id="980">980</span>
+<span id="981">981</span>
 </pre><pre class="rust"><code><span class="kw">extern crate </span>proc_macro;
 
-<span class="kw">use </span>::proc_macro::TokenStream;
-<span class="kw">use </span>::proc_macro2::Span;
-<span class="kw">use </span>::quote::{format_ident, quote};
-<span class="kw">use </span>::syn::{
+<span class="kw">use </span>proc_macro::TokenStream;
+<span class="kw">use </span>proc_macro2::Span;
+<span class="kw">use </span>quote::{format_ident, quote};
+<span class="kw">use </span>std::collections::BTreeSet;
+<span class="kw">use </span>syn::{
     parse::{Parse, ParseStream},
     parse_macro_input, parse_quote,
     spanned::Spanned,
-    Data, DeriveInput, Error, Expr, Fields, Ident, LitInt, LitStr, Meta, <span class="prelude-ty">Result</span>,
+    Attribute, Data, DeriveInput, Error, Expr, ExprLit, ExprUnary, Fields, Ident, Lit, LitInt,
+    LitStr, Meta, <span class="prelude-ty">Result</span>, UnOp,
 };
 
 <span class="macro">macro_rules! </span>die {
@@ -851,10 +1007,40 @@
     };
 }
 
-<span class="kw">fn </span>literal(i: u64) -&gt; Expr {
-    <span class="kw">let </span>literal = LitInt::new(<span class="kw-2">&amp;</span>i.to_string(), Span::call_site());
-    <span class="macro">parse_quote! </span>{
-        #literal
+<span class="kw">fn </span>literal(i: i128) -&gt; Expr {
+    Expr::Lit(ExprLit {
+        lit: Lit::Int(LitInt::new(<span class="kw-2">&amp;</span>i.to_string(), Span::call_site())),
+        attrs: <span class="macro">vec!</span>[],
+    })
+}
+
+<span class="kw">enum </span>DiscriminantValue {
+    Literal(i128),
+    Expr(Expr),
+}
+
+<span class="kw">fn </span>parse_discriminant(val_exp: <span class="kw-2">&amp;</span>Expr) -&gt; <span class="prelude-ty">Result</span>&lt;DiscriminantValue&gt; {
+    <span class="kw">let </span><span class="kw-2">mut </span>sign = <span class="number">1</span>;
+    <span class="kw">let </span><span class="kw-2">mut </span>unsigned_expr = val_exp;
+    <span class="kw">if let </span>Expr::Unary(ExprUnary {
+        op: UnOp::Neg(..),
+        expr,
+        ..
+    }) = val_exp
+    {
+        unsigned_expr = expr;
+        sign = -<span class="number">1</span>;
+    }
+    <span class="kw">if let </span>Expr::Lit(ExprLit {
+        lit: Lit::Int(<span class="kw-2">ref </span>lit_int),
+        ..
+    }) = unsigned_expr
+    {
+        <span class="prelude-val">Ok</span>(DiscriminantValue::Literal(
+            sign * lit_int.base10_parse::&lt;i128&gt;()<span class="question-mark">?</span>,
+        ))
+    } <span class="kw">else </span>{
+        <span class="prelude-val">Ok</span>(DiscriminantValue::Expr(val_exp.clone()))
     }
 }
 
@@ -995,6 +1181,23 @@
 }
 
 <span class="kw">impl </span>EnumInfo {
+    <span class="doccomment">/// Returns whether the number of variants (ignoring defaults, catch-alls, etc) is the same as
+    /// the capacity of the repr.
+    </span><span class="kw">fn </span>is_naturally_exhaustive(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;bool&gt; {
+        <span class="kw">let </span>repr_str = <span class="self">self</span>.repr.to_string();
+        <span class="kw">if </span>!repr_str.is_empty() {
+            <span class="kw">let </span>suffix = repr_str
+                .strip_prefix(<span class="string">&#39;i&#39;</span>)
+                .or_else(|| repr_str.strip_prefix(<span class="string">&#39;u&#39;</span>));
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(suffix) = suffix {
+                <span class="kw">if let </span><span class="prelude-val">Ok</span>(bits) = suffix.parse::&lt;u8&gt;() {
+                    <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="number">1 </span>&lt;&lt; bits == <span class="self">self</span>.variants.len());
+                }
+            }
+        }
+        <span class="macro">die!</span>(<span class="self">self</span>.repr.clone() =&gt; <span class="string">&quot;Failed to parse repr into bit size&quot;</span>);
+    }
+
     <span class="kw">fn </span>has_default_variant(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.default().is_some()
     }
@@ -1105,6 +1308,9 @@
             <span class="kw">let </span><span class="kw-2">mut </span>has_default_variant: bool = <span class="bool-val">false</span>;
             <span class="kw">let </span><span class="kw-2">mut </span>has_catch_all_variant: bool = <span class="bool-val">false</span>;
 
+            <span class="comment">// Vec to keep track of the used discriminants and alt values.
+            </span><span class="kw">let </span><span class="kw-2">mut </span>discriminant_int_val_set = BTreeSet::new();
+
             <span class="kw">let </span><span class="kw-2">mut </span>next_discriminant = literal(<span class="number">0</span>);
             <span class="kw">for </span>variant <span class="kw">in </span>data.variants.into_iter() {
                 <span class="kw">let </span>ident = variant.ident.clone();
@@ -1115,7 +1321,9 @@
                 };
 
                 <span class="kw">let </span><span class="kw-2">mut </span>attr_spans: AttributeSpans = Default::default();
-                <span class="kw">let </span><span class="kw-2">mut </span>alternative_values: Vec&lt;Expr&gt; = <span class="macro">vec!</span>[];
+                <span class="kw">let </span><span class="kw-2">mut </span>raw_alternative_values: Vec&lt;Expr&gt; = <span class="macro">vec!</span>[];
+                <span class="comment">// Keep the attribute around for better error reporting.
+                </span><span class="kw">let </span><span class="kw-2">mut </span>alt_attr_ref: Vec&lt;<span class="kw-2">&amp;</span>Attribute&gt; = <span class="macro">vec!</span>[];
 
                 <span class="comment">// `#[num_enum(default)]` is required by `#[derive(FromPrimitive)]`
                 // and forbidden by `#[derive(UnsafeFromPrimitive)]`, so we need to
@@ -1192,7 +1400,8 @@
                                         }
                                         NumEnumVariantAttributeItem::Alternatives(alternatives) =&gt; {
                                             attr_spans.alternatives.push(alternatives.span());
-                                            alternative_values.extend(alternatives.expressions);
+                                            raw_alternative_values.extend(alternatives.expressions);
+                                            alt_attr_ref.push(attribute);
                                         }
                                     }
                                 }
@@ -1215,20 +1424,109 @@
                     }
                 }
 
-                <span class="kw">let </span>canonical_value = discriminant.clone();
+                <span class="kw">let </span>discriminant_value = parse_discriminant(<span class="kw-2">&amp;</span>discriminant)<span class="question-mark">?</span>;
+
+                <span class="comment">// Check for collision.
+                // We can&#39;t do const evaluation, or even compare arbitrary Exprs,
+                // so unfortunately we can&#39;t check for duplicates.
+                // That&#39;s not the end of the world, just we&#39;ll end up with compile errors for
+                // matches with duplicate branches in generated code instead of nice friendly error messages.
+                </span><span class="kw">if let </span>DiscriminantValue::Literal(canonical_value_int) = discriminant_value {
+                    <span class="kw">if </span>discriminant_int_val_set.contains(<span class="kw-2">&amp;</span>canonical_value_int) {
+                        <span class="macro">die!</span>(ident =&gt; <span class="macro">format!</span>(<span class="string">&quot;The discriminant &#39;{}&#39; collides with a value attributed to a previous variant&quot;</span>, canonical_value_int))
+                    }
+                }
+
+                <span class="comment">// Deal with the alternative values.
+                </span><span class="kw">let </span>alternate_values = raw_alternative_values
+                    .iter()
+                    .map(parse_discriminant)
+                    .collect::&lt;<span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;&gt;()<span class="question-mark">?</span>;
+
+                <span class="macro">debug_assert_eq!</span>(alternate_values.len(), raw_alternative_values.len());
+
+                <span class="kw">if </span>!alternate_values.is_empty() {
+                    <span class="kw">let </span>alternate_int_values = alternate_values
+                        .into_iter()
+                        .map(|v| {
+                            <span class="kw">match </span>v {
+                                DiscriminantValue::Literal(value) =&gt; <span class="prelude-val">Ok</span>(value),
+                                DiscriminantValue::Expr(expr) =&gt; {
+                                    <span class="comment">// We can&#39;t do uniqueness checking on non-literals, so we don&#39;t allow them as alternate values.
+                                    // We could probably allow them, but there doesn&#39;t seem to be much of a use-case,
+                                    // and it&#39;s easier to give good error messages about duplicate values this way,
+                                    // rather than rustc errors on conflicting match branches.
+                                    </span><span class="macro">die!</span>(expr =&gt; <span class="macro">format!</span>(<span class="string">&quot;Only literals are allowed as num_enum alternate values&quot;</span>))
+                                },
+                            }
+                        })
+                        .collect::&lt;<span class="prelude-ty">Result</span>&lt;Vec&lt;i128&gt;&gt;&gt;()<span class="question-mark">?</span>;
+                    <span class="kw">let </span><span class="kw-2">mut </span>sorted_alternate_int_values = alternate_int_values.clone();
+                    sorted_alternate_int_values.sort_unstable();
+                    <span class="kw">let </span>sorted_alternate_int_values = sorted_alternate_int_values;
+
+                    <span class="comment">// Check if the current discriminant is not in the alternative values.
+                    </span><span class="kw">if let </span>DiscriminantValue::Literal(canonical_value_int) = discriminant_value {
+                        <span class="kw">if let </span><span class="prelude-val">Some</span>(index) = alternate_int_values
+                            .iter()
+                            .position(|<span class="kw-2">&amp;</span>x| x == canonical_value_int)
+                        {
+                            <span class="macro">die!</span>(<span class="kw-2">&amp;</span>raw_alternative_values[index] =&gt; <span class="macro">format!</span>(<span class="string">&quot;&#39;{}&#39; in the alternative values is already attributed as the discriminant of this variant&quot;</span>, canonical_value_int));
+                        }
+                    }
+
+                    <span class="comment">// Search for duplicates, the vec is sorted. Warn about them.
+                    </span><span class="kw">if </span>(<span class="number">1</span>..sorted_alternate_int_values.len()).any(|i| {
+                        sorted_alternate_int_values[i] == sorted_alternate_int_values[i - <span class="number">1</span>]
+                    }) {
+                        <span class="kw">let </span>attr = <span class="kw-2">*</span>alt_attr_ref.last().unwrap();
+                        <span class="macro">die!</span>(attr =&gt; <span class="string">&quot;There is duplication in the alternative values&quot;</span>);
+                    }
+                    <span class="comment">// Search if those discriminant_int_val_set where already attributed.
+                    // (discriminant_int_val_set is BTreeSet, and iter().next_back() is the is the maximum in the set.)
+                    </span><span class="kw">if let </span><span class="prelude-val">Some</span>(last_upper_val) = discriminant_int_val_set.iter().next_back() {
+                        <span class="kw">if </span>sorted_alternate_int_values.first().unwrap() &lt;= last_upper_val {
+                            <span class="kw">for </span>(index, val) <span class="kw">in </span>alternate_int_values.iter().enumerate() {
+                                <span class="kw">if </span>discriminant_int_val_set.contains(val) {
+                                    <span class="macro">die!</span>(<span class="kw-2">&amp;</span>raw_alternative_values[index] =&gt; <span class="macro">format!</span>(<span class="string">&quot;&#39;{}&#39; in the alternative values is already attributed to a previous variant&quot;</span>, val));
+                                }
+                            }
+                        }
+                    }
+
+                    <span class="comment">// Reconstruct the alternative_values vec of Expr but sorted.
+                    </span>raw_alternative_values = sorted_alternate_int_values
+                        .iter()
+                        .map(|val| literal(val.to_owned()))
+                        .collect();
+
+                    <span class="comment">// Add the alternative values to the the set to keep track.
+                    </span>discriminant_int_val_set.extend(sorted_alternate_int_values);
+                }
+
+                <span class="comment">// Add the current discriminant to the the set to keep track.
+                </span><span class="kw">if let </span>DiscriminantValue::Literal(canonical_value_int) = discriminant_value {
+                    discriminant_int_val_set.insert(canonical_value_int);
+                }
 
                 variants.push(VariantInfo {
                     ident,
                     attr_spans,
                     is_default,
                     is_catch_all,
-                    canonical_value,
-                    alternative_values,
+                    canonical_value: discriminant,
+                    alternative_values: raw_alternative_values,
                 });
 
-                next_discriminant = <span class="macro">parse_quote! </span>{
-                    #repr::wrapping_add(#discriminant, <span class="number">1</span>)
-                };
+                <span class="comment">// Get the next value for the discriminant.
+                </span>next_discriminant = <span class="kw">match </span>discriminant_value {
+                    DiscriminantValue::Literal(int_value) =&gt; literal(int_value.wrapping_add(<span class="number">1</span>)),
+                    DiscriminantValue::Expr(expr) =&gt; {
+                        <span class="macro">parse_quote! </span>{
+                            #repr::wrapping_add(#expr, <span class="number">1</span>)
+                        }
+                    }
+                }
             }
 
             EnumInfo {
@@ -1318,15 +1616,25 @@
     <span class="kw">let </span>enum_info: EnumInfo = <span class="macro">parse_macro_input!</span>(input);
     <span class="kw">let </span>krate = Ident::new(<span class="kw-2">&amp;</span>get_crate_name(), Span::call_site());
 
-    <span class="kw">let </span>catch_all_body = <span class="kw">if let </span><span class="prelude-val">Some</span>(default_ident) = enum_info.default() {
-        <span class="macro">quote! </span>{ <span class="self">Self</span>::#default_ident }
-    } <span class="kw">else if let </span><span class="prelude-val">Some</span>(catch_all_ident) = enum_info.catch_all() {
-        <span class="macro">quote! </span>{ <span class="self">Self</span>::#catch_all_ident(number) }
-    } <span class="kw">else </span>{
-        <span class="kw">let </span>span = Span::call_site();
-        <span class="kw">let </span>message =
-            <span class="string">&quot;#[derive(FromPrimitive)] requires a variant marked with `#[default]`, `#[num_enum(default)]`, or `#[num_enum(catch_all)`&quot;</span>;
-        <span class="kw">return </span>syn::Error::new(span, message).to_compile_error().into();
+    <span class="kw">let </span>is_naturally_exhaustive = enum_info.is_naturally_exhaustive();
+    <span class="kw">let </span>catch_all_body = <span class="kw">match </span>is_naturally_exhaustive {
+        <span class="prelude-val">Ok</span>(is_naturally_exhaustive) =&gt; {
+            <span class="kw">if </span>is_naturally_exhaustive {
+                <span class="macro">quote! </span>{ <span class="macro">unreachable!</span>(<span class="string">&quot;exhaustive enum&quot;</span>) }
+            } <span class="kw">else if let </span><span class="prelude-val">Some</span>(default_ident) = enum_info.default() {
+                <span class="macro">quote! </span>{ <span class="self">Self</span>::#default_ident }
+            } <span class="kw">else if let </span><span class="prelude-val">Some</span>(catch_all_ident) = enum_info.catch_all() {
+                <span class="macro">quote! </span>{ <span class="self">Self</span>::#catch_all_ident(number) }
+            } <span class="kw">else </span>{
+                <span class="kw">let </span>span = Span::call_site();
+                <span class="kw">let </span>message =
+                    <span class="string">&quot;#[derive(num_enum::FromPrimitive)] requires enum to be exhaustive, or a variant marked with `#[default]`, `#[num_enum(default)]`, or `#[num_enum(catch_all)`&quot;</span>;
+                <span class="kw">return </span>syn::Error::new(span, message).to_compile_error().into();
+            }
+        }
+        <span class="prelude-val">Err</span>(err) =&gt; {
+            <span class="kw">return </span>err.to_compile_error().into();
+        }
     };
 
     <span class="kw">let </span>EnumInfo {
@@ -1636,7 +1944,7 @@ Transmutes `number: {repr}` into a [`{name}`].
         <span class="prelude-val">None </span>=&gt; {
             <span class="kw">let </span>span = Span::call_site();
             <span class="kw">let </span>message =
-                <span class="string">&quot;#[derive(num_enum::Default)] requires a variant marked with `#[default]` or `#[num_enum(default)]`&quot;</span>;
+                <span class="string">&quot;#[derive(num_enum::Default)] requires enum to be exhaustive, or a variant marked with `#[default]` or `#[num_enum(default)]`&quot;</span>;
             <span class="kw">return </span>syn::Error::new(span, message).to_compile_error().into();
         }
     };
