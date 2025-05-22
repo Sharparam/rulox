@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["CompileError","Errors that can occur during compilation."],["OpCode",""]],"fn":[["compile",""]],"struct":[["Chunk",""]]};
+window.SIDEBAR_ITEMS = {"enum":["CompileError","OpCode"],"fn":["compile"],"struct":["Chunk"]};
