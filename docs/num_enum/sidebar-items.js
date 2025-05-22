@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"derive":["Default","FromPrimitive","IntoPrimitive","TryFromPrimitive","UnsafeFromPrimitive"],"struct":["TryFromPrimitiveError"],"trait":["FromPrimitive","TryFromPrimitive"]};
+window.SIDEBAR_ITEMS = {"derive":["Default","FromPrimitive","IntoPrimitive","TryFromPrimitive","UnsafeFromPrimitive"],"struct":["TryFromPrimitiveError"],"trait":["FromPrimitive","TryFromPrimitive","UnsafeFromPrimitive"]};

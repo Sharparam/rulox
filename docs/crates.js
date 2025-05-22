@@ -1,2 +1,2 @@
-window.ALL_CRATES = ["equivalent","hashbrown","indexmap","num_enum","num_enum_derive","once_cell","pin_project_lite","proc_macro2","proc_macro_crate","quote","rulox","thiserror","thiserror_impl","toml_datetime","toml_edit","tracing","tracing_attributes","tracing_core","unicode_ident","winnow"];
-//{"start":21,"fragment_lengths":[12,12,11,11,18,12,19,14,19,8,8,12,17,16,12,10,21,15,16,9]}
+window.ALL_CRATES = ["equivalent","hashbrown","indexmap","num_enum","num_enum_derive","once_cell","pin_project_lite","proc_macro2","proc_macro_crate","quote","rulox","syn","thiserror","thiserror_impl","toml_datetime","toml_edit","tracing","tracing_attributes","tracing_core","unicode_ident","winnow"];
+//{"start":21,"fragment_lengths":[12,12,11,11,18,12,19,14,19,8,8,6,12,17,16,12,10,21,15,16,9]}
