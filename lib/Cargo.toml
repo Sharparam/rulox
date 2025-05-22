@@ -1,12 +1,12 @@
 [package]
 name = "rulox"
 version = "0.1.0"
-authors = ["Adam Hellberg <sharparam@sharparam.com>"]
-edition = "2021"
+authors.workspace = true
+edition.workspace = true
 description = "Rust implementation of the Lox language (bytecode version)"
-homepage = "https://github.com/Sharparam/rulox"
-repository = "https://github.com/Sharparam/rulox"
-license = "MPL-2.0"
+homepage.workspace = true
+repository.workspace = true
+license.workspace = true
 keywords = ["lox", "language"]
 categories = ["compilers"]
 

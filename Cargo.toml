@@ -3,3 +3,10 @@ members = [
     "lib",
     "cli"
 ]
+
+[workspace.package]
+authors = ["Adam Hellberg <sharparam@sharparam.com>"]
+edition = "2024"
+homepage = "https://github.com/Sharparam/rulox"
+license = "MPL-2.0"
+repository = "https://github.com/Sharparam/rulox"
