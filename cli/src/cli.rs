@@ -1,4 +1,4 @@
-use clap::{ArgEnum, Parser};
+use clap::{Parser, ValueEnum};
 use tracing::Level;
 
 // pub const EX_DATAERR: u8 = 65;
@@ -24,7 +24,7 @@ pub struct Args {
     pub verbose: bool,
 
     /// Log level to use
-    #[clap(short, long, arg_enum, default_value_t = LogLevel::Warn)]
+    #[clap(short, long, value_enum, default_value_t = LogLevel::Warn)]
     level: LogLevel,
 
     /// Disassemble the input program
@@ -44,7 +44,7 @@ impl Args {
     }
 }
 
-#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ArgEnum)]
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum)]
 enum LogLevel {
     Trace = 0,
     Debug = 1,

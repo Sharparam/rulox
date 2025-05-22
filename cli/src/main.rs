@@ -21,7 +21,9 @@ fn main() -> ExitCode {
         if let Some(clap_err) = err.root_cause().downcast_ref::<clap::error::Error>() {
             clap_err.print().unwrap();
             return match clap_err.kind() {
-                clap::ErrorKind::DisplayHelp | clap::ErrorKind::DisplayVersion => ExitCode::SUCCESS,
+                clap::error::ErrorKind::DisplayHelp | clap::error::ErrorKind::DisplayVersion => {
+                    ExitCode::SUCCESS
+                }
                 _ => ExitCode::from(64),
             };
         }
